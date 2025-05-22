@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function() {
+  // menuContainer 관련 코드와 fetch('menu.html') 부분을 삭제합니다.
 
   // 괴담 메뉴 드롭다운 오래 보이게
   const menuLi = document.getElementById('urbanMenu');

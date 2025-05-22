@@ -1,0 +1,293 @@
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', Arial, sans-serif;
+  background: #111;
+  color: #fafafa;
+}
+header {
+  background: #111;
+  border-bottom: 1px solid #222;
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.3rem 2rem;
+  display: flex;
+  align-items: center;
+}
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #e01c1c;
+  text-decoration: none;
+  border: none;
+  margin-left: 1rem;
+  transition: color 0.2s;
+}
+.logo:visited, .logo:active, .logo:hover {
+  text-decoration: none;
+  color: #e01c1c;
+  border: none;
+}
+nav {
+  margin-left: 2.5rem;
+}
+.gnb {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  font-size: 1.1rem;
+  position: relative;
+}
+.gnb li {
+  position: relative;
+}
+.gnb a {
+  text-decoration: none;
+  color: #fafafa;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.gnb a:visited, .gnb a:link, .gnb a:active {
+  color: #fafafa;
+  text-decoration: none;
+}
+.gnb a:hover {
+  color: #e01c1c;
+  text-decoration: none;
+}
+/* Dropdown & submenu styles */
+.gnb .dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.gnb .dropdown-arrow {
+  margin-left: 5px;
+  font-size: 0.85em;
+  transition: transform 0.18s;
+  display: inline-block;
+}
+.gnb .dropdown.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+.gnb .submenu {
+  display: none;
+  position: absolute;
+  top: 2.5rem;
+  left: 0;
+  min-width: 170px;
+  background: #222;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  z-index: 100;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  animation: fadeIn 0.2s;
+}
+.gnb li.show-submenu > .submenu {
+  display: flex;
+}
+.submenu a {
+  color: #fafafa;
+  padding: 0.7rem 1.4rem;
+  text-decoration: none;
+  font-size: 1rem;
+  white-space: nowrap;
+  transition: background 0.18s, color 0.18s;
+}
+.submenu a:hover {
+  background: #e01c1c;
+  color: #fff;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* ------ 홈(main-section, slider 등) ------ */
+.main-section {
+  max-width: 1200px;
+  margin: 2.5rem auto 0 auto;
+  padding: 0 2rem;
+}
+.main-section h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  letter-spacing: 1px;
+  color: #fafafa;
+}
+.main-section p {
+  color: #bbb;
+  margin-bottom: 2rem;
+}
+.slider-area {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: center;
+}
+.slider-arrow {
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #aaa;
+  margin: 0 0.5rem;
+}
+.slider-arrow:hover {
+  background: #e01c1c;
+  color: #fff;
+}
+.product-list {
+  display: flex;
+  gap: 2rem;
+  flex: 1;
+  justify-content: center;
+}
+.product-card {
+  background: #181818;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  padding: 1rem 1rem 1.5rem 1rem;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.2s;
+}
+.product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.product-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #fafafa;
+}
+.product-price {
+  color: #e01c1c;
+  font-size: 1rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+.rating {
+  color: #ffb400;
+  font-size: 1.05rem;
+  font-family: monospace;
+  margin-bottom: 0.2rem;
+}
+
+/* ------ urban(괴담 페이지) ------ */
+.urban-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.urban-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fafafa;
+  letter-spacing: 1px;
+}
+.urban-sort {
+  display: flex;
+  gap: 1rem;
+}
+.urban-sort button {
+  background: #222;
+  color: #fafafa;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.18s, color 0.18s;
+}
+.urban-sort button.active, .urban-sort button:hover {
+  background: #e01c1c;
+  color: #fff;
+}
+.urban-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.7rem;
+}
+.urban-item {
+  background: #181818;
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.urban-item-title {
+  font-size: 1.2rem;
+  color: #e01c1c;
+  font-weight: 600;
+}
+.urban-item-meta {
+  font-size: 0.95rem;
+  color: #bbb;
+  margin-bottom: 0.3rem;
+  display: flex;
+  gap: 1.5rem;
+}
+.urban-item-body {
+  color: #fafafa;
+}
+
+/* ------ 공통 푸터 ------ */
+footer {
+  margin-top: 4rem;
+  padding: 2rem 0 1rem 0;
+  background: #181818;
+  color: #888;
+  text-align: center;
+  font-size: 1rem;
+  border-top: 1px solid #222;
+}
+
+/* ------ 반응형 ------ */
+@media (max-width: 900px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  nav {
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+  }
+  .slider-area, .product-list {
+    flex-direction: column;
+    align-items: center;
+  }
+  .product-card {
+    width: 90vw;
+    max-width: 350px;
+  }
+}
+@media (max-width:700px) {
+  .urban-header { flex-direction: column; gap: 1.2rem; align-items: flex-start;}
+  .urban-list { gap: 1rem;}
+  .urban-item { padding: 1rem;}
+}

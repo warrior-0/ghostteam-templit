@@ -37,8 +37,30 @@
       </div>
     </div>
   </header>
- 
   <main>
+  <section style="max-width: 900px; margin: 2.5rem auto 0 auto; padding: 0 2rem;">
+    <!-- 로그인 안내 영역 -->
+    <div id="urban-login-cover" style="display:none; text-align:center; padding:3rem 0;">
+      <div style="font-size:1.3rem; margin-bottom:1.5rem;">로그인 후 이용할 수 있습니다.</div>
+      <button id="urban-login-btn" style="padding:0.7rem 2.2rem; font-size:1.05rem;">로그인</button>
+      <button id="urban-signup-btn" style="padding:0.7rem 2.2rem; font-size:1.05rem; margin-left:1.5rem;">회원가입</button>
+    </div>
+    <!-- 괴담 컨텐츠 영역 -->
+    <div id="urban-main-content">
+      <div class="urban-header">
+        <div class="urban-title">괴담 모음</div>
+        <div class="urban-sort">
+          <button class="sort-btn active" data-sort="latest">최신순</button>
+          <button class="sort-btn" data-sort="popular">인기순</button>
+          <button class="sort-btn" data-sort="level">공포 난이도순</button>
+        </div>
+      </div>
+      <div class="urban-list" id="urbanList">
+        <!-- 괴담 목록/상세 JS 렌더링 -->
+      </div>
+    </div>
+  </section>
+
     <section style="max-width: 900px; margin: 2.5rem auto 0 auto; padding: 0 2rem;">
       <div class="urban-header">
         <div class="urban-title">괴담 모음</div>

@@ -22,10 +22,69 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 let currentUser = null;
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  // 로그인 상태 UI 처리 필요시 추가
-});
+// 로그인 상태 감지 및 UI 업데이트
+    onAuthStateChanged(auth, (user) => {
+
+      currentUser = user;
+      if (user) {
+        document.getElementById("userStatus").innerText = `로그인: ${user.email}`;
+        document.getElementById("authSection").style.display = "none";
+        document.getElementById("postSection").style.display = "block";
+        loadPosts();
+        loadComments();
+        calculateAverageRating();
+      } else {
+        document.getElementById("userStatus").innerText = "로그인 필요";
+        document.getElementById("authSection").style.display = "block";
+        document.getElementById("postSection").style.display = "none";
+      }
+    });
+
+    // 회원가입
+    async function signUp() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const nickname = document.getElementById("nickname").value.trim();
+
+  if (!nickname) {
+    alert("닉네임을 입력해주세요.");
+    return;
+  }
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Firestore에 닉네임 저장
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      nickname: nickname,
+    });
+
+    alert("회원가입 완료! 로그인되었습니다.");
+  } catch (error) {
+    alert("회원가입 오류: " + error.message);
+  }
+}
+
+
+    // 로그인
+    async function signIn() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("로그인 성공!");
+      } catch (error) {
+        alert("로그인 오류: " + error.message);
+      }
+    }
+
+    // 로그아웃
+    async function signOutUser() {
+      await signOut(auth);
+      alert("로그아웃 되었습니다.");
+    }
 // 좋아요 수 + 유저가 눌렀는지 확인
 async function updateUrbanLikeUI(postId) {
   // 좋아요 개수

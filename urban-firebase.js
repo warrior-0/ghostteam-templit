@@ -1,8 +1,6 @@
 // Firebase import 및 초기화 (community.html 참고)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
 import {
   getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, setDoc, getDoc, deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -18,27 +16,57 @@ const firebaseConfig = {
   measurementId: "G-B758ZC971V"
 };
 const app = initializeApp(firebaseConfig);
+
+// 로그인 상태 감지 및 UI 업데이트
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+// ...기존 코드...
+
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 let currentUser = null;
-// 로그인 상태 감지 및 UI 업데이트
-    onAuthStateChanged(auth, (user) => {
 
-      currentUser = user;
-      if (user) {
-        document.getElementById("userStatus").innerText = `로그인: ${user.email}`;
-        document.getElementById("authSection").style.display = "none";
-        document.getElementById("postSection").style.display = "block";
-        loadPosts();
-        loadComments();
-        calculateAverageRating();
-      } else {
-        document.getElementById("userStatus").innerText = "로그인 필요";
-        document.getElementById("authSection").style.display = "block";
-        document.getElementById("postSection").style.display = "none";
+// 로그인 상태에 따라 괴담 화면 노출/숨김
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  const mainContent = document.getElementById("urban-main-content");
+  const loginCover = document.getElementById("urban-login-cover");
+  if (user) {
+    if (mainContent) mainContent.style.display = "";
+    if (loginCover) loginCover.style.display = "none";
+  } else {
+    if (mainContent) mainContent.style.display = "none";
+    if (loginCover) loginCover.style.display = "";
+  }
+});
+
+// 로그인/회원가입 버튼 이벤트 바인딩 (예시)
+document.addEventListener("DOMContentLoaded", () => {
+  const loginBtn = document.getElementById("urban-login-btn");
+  const signupBtn = document.getElementById("urban-signup-btn");
+  if (loginBtn) {
+    loginBtn.onclick = () => {
+      // 간단한 예시: prompt로 로그인 (실제 서비스는 모달/폼 권장)
+      const email = prompt("이메일 입력");
+      const pw = prompt("비밀번호 입력");
+      if (email && pw) {
+        signInWithEmailAndPassword(auth, email, pw)
+          .catch(e => alert("로그인 실패: " + e.message));
       }
-    });
+    };
+  }
+  if (signupBtn) {
+    signupBtn.onclick = () => {
+      const email = prompt("이메일 입력");
+      const pw = prompt("비밀번호 입력(6자 이상)");
+      if (email && pw) {
+        createUserWithEmailAndPassword(auth, email, pw)
+          .then(() => alert("회원가입 성공! 다시 로그인 해주세요."))
+          .catch(e => alert("회원가입 실패: " + e.message));
+      }
+    };
+  }
+});
 
     // 회원가입
     async function signUp() {

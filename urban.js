@@ -78,43 +78,53 @@ function renderLevelStars(level) {
   return '★'.repeat(level) + '☆'.repeat(5 - level);
 }
 
-function renderUrbanList(sortType, filterType) {
-  let list = [...urbanData];
-  if (filterType && filterType !== 'all') {
-    list = list.filter(item => item.filter === filterType);
-  }
-  if (sortType === 'latest') {
-    list.sort((a, b) => b.date.localeCompare(a.date));
-  } else if (sortType === 'popular') {
-    list.sort((a, b) => b.likes - a.likes);
-  } else if (sortType === 'level') {
-    list.sort((a, b) => b.level - a.level);
-  }
+function renderUrbanDetail(id) {
   const urbanList = document.getElementById('urbanList');
-  if (list.length === 0) {
-    urbanList.innerHTML = `<div style="color:#bbb; padding:2rem 0;">등록된 괴담이 없습니다.</div>`;
-  } else {
-    urbanList.innerHTML =
-      list.map(item => `
-        <div class="urban-item" data-id="${item.id}" style="cursor:pointer;">
-          <div class="urban-item-title">${item.title}</div>
-          <div class="urban-item-meta">
-            <span>좋아요 ${item.likes}개</span>
-            <span>${item.date}</span>
-            <span>공포 난이도: <span class="level-stars">${renderLevelStars(item.level)}</span></span>
-          </div>
-          <div class="urban-item-body">${item.body}</div>
-        </div>
-      `).join('');
-    // 클릭 이벤트 등록(상세보기)
-    document.querySelectorAll('.urban-item').forEach(itemElem => {
-      itemElem.addEventListener('click', function(){
-        const clickId = this.getAttribute('data-id');
-        window.history.pushState({}, '', `?id=${clickId}`);
-        renderUrbanDetail(parseInt(clickId, 10));
-      });
-    });
+  const data = urbanData.find(item => item.id === id);
+  if (!data) {
+    urbanList.innerHTML = `<div style="color:#bbb; padding:2rem 0;">괴담을 찾을 수 없습니다.</div>`;
+    updateUrbanTitle('괴담 모음');
+    return;
   }
+  const titleElem = document.querySelector('.urban-title');
+  if (titleElem) titleElem.textContent = data.title;
+
+  urbanList.innerHTML = `
+    <div class="urban-item urban-detail">
+      <div class="urban-item-title" style="font-size:1.5rem;">${data.title}</div>
+      <div class="urban-item-meta">
+        <span id="urban-like-count">좋아요 0개</span>
+        <button id="urban-like-btn">♥ 좋아요</button>
+        <span>${data.date}</span>
+        <span>공포 난이도: <span class="level-stars">${renderLevelStars(data.level)}</span></span>
+      </div>
+      <div class="urban-item-body" style="margin-top:1.5rem; font-size:1.1rem; line-height:1.7;">${data.detail || data.body}</div>
+      <hr>
+      <div id="urban-comments-section">
+        <form id="urban-comment-form">
+          <textarea id="urban-comment-input" placeholder="댓글 작성" required></textarea>
+          <button type="submit">댓글 달기</button>
+        </form>
+        <ul id="urban-comment-list"></ul>
+      </div>
+      <button class="urban-back-btn" style="margin-top:2rem;">목록으로</button>
+    </div>
+  `;
+  document.querySelector('.urban-back-btn').addEventListener('click', function(){
+    window.history.back();
+  });
+
+  updateUrbanLikeUI(id);
+  loadUrbanComments(id);
+
+  // 좋아요 버튼
+  document.getElementById('urban-like-btn').onclick = () => handleUrbanLike(id);
+
+  // 댓글 폼
+  document.getElementById('urban-comment-form').onsubmit = (e) => {
+    e.preventDefault();
+    submitUrbanComment(id);
+  };
 }
 
 function renderUrbanDetail(id) {

@@ -16,174 +16,268 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-const urlParams = new URLSearchParams(window.location.search);
-const postId = urlParams.get('id');
+// 이 함수만 export
+export function initUrbanFirebase(postId) {
+  // 댓글 작성 이벤트
+  const commentForm = document.getElementById("commentForm");
+  const commentInput = document.getElementById("commentInput");
+  const commentList = document.getElementById("commentList");
+  const likeBtn = document.getElementById("likeBtn");
+  const likeCount = document.getElementById("likeCount");
 
-if (!postId) {
-  document.getElementById("postTitle").innerText = "글 ID가 없습니다.";
-  throw new Error("No postId in URL");
-}
+  // 이전에 이벤트가 있다면 제거(중복 방지, 필요시)
+  commentForm.onsubmit = null;
+  likeBtn.onclick = null;
 
-async function loadPost() {
-  try {
-    const postRef = doc(db, "posts", postId);
-    const postSnap = await getDoc(postRef);
-    if (postSnap.exists()) {
-      const data = postSnap.data();
-      document.getElementById("postTitle").innerText = data.title || "(제목 없음)";
-      document.getElementById("postContent").innerText = data.content || "(내용 없음)";
-    } else {
-      document.getElementById("postTitle").innerText = "존재하지 않는 게시글입니다.";
-      document.getElementById("postContent").innerText = "";
+  // 댓글 불러오기
+  async function loadComments() {
+    try {
+      const user = auth.currentUser;
+      const commentsRef = collection(db, "posts", String(postId), "comments");
+      const q = query(commentsRef, orderBy("timestamp", "asc"));
+      const snapshot = await getDocs(q);
+      commentList.innerHTML = "";
+      snapshot.forEach(docSnap => {
+        const c = docSnap.data();
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${c.authorname || "익명"}</strong>: ${c.comment}`;
+        if (user && c.uid === user.uid) {
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "수정";
+          editBtn.className = "comment-action-btn";
+          editBtn.onclick = () => editComment(docSnap.id, c);
+          li.appendChild(editBtn);
+
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "삭제";
+          delBtn.className = "comment-action-btn";
+          delBtn.onclick = () => deleteComment(docSnap.id);
+          li.appendChild(delBtn);
+        }
+        commentList.appendChild(li);
+      });
+    } catch (err) {
+      commentList.innerHTML = "<li>댓글을 불러오는 중 오류 발생</li>";
     }
-  } catch (err) {
-    document.getElementById("postTitle").innerText = "오류 발생!";
-    document.getElementById("postContent").innerText = err.message;
   }
-}
 
-async function loadComments() {
-  try {
-    // 항상 최신 로그인 상태의 유저 정보를 사용해야 함
-    const user = auth.currentUser;
-    const commentsRef = collection(db, "posts", postId, "comments");
-    const q = query(commentsRef, orderBy("timestamp", "asc"));
-    const snapshot = await getDocs(q);
-    const list = document.getElementById("commentList");
-    list.innerHTML = "";
-    snapshot.forEach(docSnap => {
-      const c = docSnap.data();
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${c.authorname || "익명"}</strong>: ${c.comment}`;
-      // 본인 댓글이면 수정/삭제 버튼 추가
-      if (user && c.uid === user.uid) {
-        const editBtn = document.createElement("button");
-        editBtn.textContent = "수정";
-        editBtn.className = "comment-action-btn";
-        editBtn.onclick = () => editComment(docSnap.id, c);
-        li.appendChild(editBtn);
-
-        const delBtn = document.createElement("button");
-        delBtn.textContent = "삭제";
-        delBtn.className = "comment-action-btn";
-        delBtn.onclick = () => deleteComment(docSnap.id);
-        li.appendChild(delBtn);
-      }
-      list.appendChild(li);
-    });
-  } catch (err) {
-    document.getElementById("commentList").innerHTML = "<li>댓글을 불러오는 중 오류 발생</li>";
+  // 댓글 수정
+  function editComment(commentId, c) {
+    const newComment = prompt("댓글을 수정하세요", c.comment);
+    if (newComment !== null && newComment.trim() !== "") {
+      const commentRef = doc(db, "posts", String(postId), "comments", commentId);
+      setDoc(commentRef, { ...c, comment: newComment }, { merge: true })
+        .then(() => {
+          alert("댓글이 수정되었습니다.");
+          loadComments();
+        });
+    }
   }
-}
 
-// 댓글 수정 함수
-function editComment(commentId, c) {
-  const newComment = prompt("댓글을 수정하세요", c.comment);
-  if (newComment !== null && newComment.trim() !== "") {
-    const commentRef = doc(db, "posts", postId, "comments", commentId);
-    setDoc(commentRef, { ...c, comment: newComment }, { merge: true })
-      .then(() => {
-        alert("댓글이 수정되었습니다.");
-        loadComments();
-      });
+  // 댓글 삭제
+  function deleteComment(commentId) {
+    if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+      const commentRef = doc(db, "posts", String(postId), "comments", commentId);
+      deleteDoc(commentRef)
+        .then(() => {
+          alert("댓글이 삭제되었습니다.");
+          loadComments();
+        });
+    }
   }
-}
 
-// 댓글 삭제 함수
-function deleteComment(commentId) {
-  if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
-    const commentRef = doc(db, "posts", postId, "comments", commentId);
-    deleteDoc(commentRef)
-      .then(() => {
-        alert("댓글이 삭제되었습니다.");
-        loadComments();
-      });
+  // 좋아요 수 불러오기
+  async function updateLikeCount() {
+    try {
+      const likesCol = collection(db, "posts", String(postId), "likes");
+      const likesSnap = await getDocs(likesCol);
+      likeCount.innerText = likesSnap.size;
+    } catch (err) {
+      likeCount.innerText = "오류";
+    }
   }
-}
 
-async function updateLikeCount() {
-  try {
-    const likesCol = collection(db, "posts", postId, "likes");
-    const likesSnap = await getDocs(likesCol);
-    document.getElementById("likeCount").innerText = likesSnap.size;
-  } catch (err) {
-    document.getElementById("likeCount").innerText = "오류";
-  }
-}
-
-// 댓글/좋아요 등록 이벤트 내부 예시 (onAuthStateChanged 내부)
-document.getElementById("commentForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  if (!auth.currentUser) {
-    alert("로그인 후 댓글 작성 가능합니다.");
-    return;
-  }
-  const comment = document.getElementById("commentInput").value.trim();
-  if (!comment) return alert("댓글을 입력하세요.");
-
-  // 닉네임 가져오기 (생략 시 "익명")
-  let nickname = "익명";
-  try {
-    const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
-    if (userDoc.exists()) nickname = userDoc.data().nickname || "익명";
-  } catch {}
-
-  await addDoc(collection(db, "posts", postId, "comments"), {
-    comment,
-    authorname: nickname,
-    uid: auth.currentUser.uid,
-    timestamp: serverTimestamp(),
-  });
-  document.getElementById("commentInput").value = "";
-  await loadComments();
-});
-
-document.getElementById("likeBtn").addEventListener("click", async () => {
-  if (!auth.currentUser) {
-    alert("로그인 후 좋아요 가능합니다.");
-    return;
-  }
-  const likeRef = doc(db, "posts", postId, "likes", auth.currentUser.uid);
-  const likeSnap = await getDoc(likeRef);
-  if (likeSnap.exists()) {
-    alert("이미 좋아요를 눌렀습니다.");
-    return;
-  }
-  await setDoc(likeRef, { likedAt: serverTimestamp() });
-  await updateLikeCount();
-});
-
-// 아래처럼 onAuthStateChanged 사용
-onAuthStateChanged(auth, (user) => {
-  document.getElementById("commentForm").addEventListener("submit", async (e) => {
+  // 댓글 작성
+  commentForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!user) {
+    if (!auth.currentUser) {
       alert("로그인 후 댓글 작성 가능합니다.");
       return;
     }
-    // ... 이하 생략
+    const comment = commentInput.value.trim();
+    if (!comment) return alert("댓글을 입력하세요.");
+    let nickname = "익명";
+    try {
+      const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+      if (userDoc.exists()) nickname = userDoc.data().nickname || "익명";
+    } catch {}
+    await addDoc(collection(db, "posts", String(postId), "comments"), {
+      comment,
+      authorname: nickname,
+      uid: auth.currentUser.uid,
+      timestamp: serverTimestamp(),
+    });
+    commentInput.value = "";
+    await loadComments();
   });
 
-  document.getElementById("likeBtn").addEventListener("click", async () => {
-    if (!user) {
+  // 좋아요 버튼
+  likeBtn.addEventListener("click", async () => {
+    if (!auth.currentUser) {
       alert("로그인 후 좋아요 가능합니다.");
       return;
     }
+    const likeRef = doc(db, "posts", String(postId), "likes", auth.currentUser.uid);
+    const likeSnap = await getDoc(likeRef);
+    if (likeSnap.exists()) {
+      alert("이미 좋아요를 눌렀습니다.");
+      return;
+    }
+    await setDoc(likeRef, { likedAt: serverTimestamp() });
+    await updateLikeCount();
   });
-});
 
-// 페이지 로딩 시 데이터 불러오기
-window.onload = async () => {
-  await loadPost();
-  await loadComments();
-  await updateLikeCount();
-};
+  // 로그인 상태 바뀌면 댓글, 좋아요 다시 불러오기
+  onAuthStateChanged(auth, () => {
+    loadComments();
+    updateLikeCount();
+  });
 
-// export 함수 추가 (맨 아래에)
-export async function initUrbanFirebase(postId) {
-  // 이벤트 연결, 데이터 불러오기
-  document.getElementById("commentForm").addEventListener("submit", ...);
-  document.getElementById("likeBtn").addEventListener("click", ...);
-  await loadComments();
-  await updateLikeCount();
+  const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// 이 함수만 export
+export function initUrbanFirebase(postId) {
+  // 댓글 작성 이벤트
+  const commentForm = document.getElementById("commentForm");
+  const commentInput = document.getElementById("commentInput");
+  const commentList = document.getElementById("commentList");
+  const likeBtn = document.getElementById("likeBtn");
+  const likeCount = document.getElementById("likeCount");
+
+  // 이전에 이벤트가 있다면 제거(중복 방지, 필요시)
+  commentForm.onsubmit = null;
+  likeBtn.onclick = null;
+
+  // 댓글 불러오기
+  async function loadComments() {
+    try {
+      const user = auth.currentUser;
+      const commentsRef = collection(db, "posts", String(postId), "comments");
+      const q = query(commentsRef, orderBy("timestamp", "asc"));
+      const snapshot = await getDocs(q);
+      commentList.innerHTML = "";
+      snapshot.forEach(docSnap => {
+        const c = docSnap.data();
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${c.authorname || "익명"}</strong>: ${c.comment}`;
+        if (user && c.uid === user.uid) {
+          const editBtn = document.createElement("button");
+          editBtn.textContent = "수정";
+          editBtn.className = "comment-action-btn";
+          editBtn.onclick = () => editComment(docSnap.id, c);
+          li.appendChild(editBtn);
+
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "삭제";
+          delBtn.className = "comment-action-btn";
+          delBtn.onclick = () => deleteComment(docSnap.id);
+          li.appendChild(delBtn);
+        }
+        commentList.appendChild(li);
+      });
+    } catch (err) {
+      commentList.innerHTML = "<li>댓글을 불러오는 중 오류 발생</li>";
+    }
+  }
+
+  // 댓글 수정
+  function editComment(commentId, c) {
+    const newComment = prompt("댓글을 수정하세요", c.comment);
+    if (newComment !== null && newComment.trim() !== "") {
+      const commentRef = doc(db, "posts", String(postId), "comments", commentId);
+      setDoc(commentRef, { ...c, comment: newComment }, { merge: true })
+        .then(() => {
+          alert("댓글이 수정되었습니다.");
+          loadComments();
+        });
+    }
+  }
+
+  // 댓글 삭제
+  function deleteComment(commentId) {
+    if (confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+      const commentRef = doc(db, "posts", String(postId), "comments", commentId);
+      deleteDoc(commentRef)
+        .then(() => {
+          alert("댓글이 삭제되었습니다.");
+          loadComments();
+        });
+    }
+  }
+
+  // 좋아요 수 불러오기
+  async function updateLikeCount() {
+    try {
+      const likesCol = collection(db, "posts", String(postId), "likes");
+      const likesSnap = await getDocs(likesCol);
+      likeCount.innerText = likesSnap.size;
+    } catch (err) {
+      likeCount.innerText = "오류";
+    }
+  }
+
+  // 댓글 작성
+  commentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!auth.currentUser) {
+      alert("로그인 후 댓글 작성 가능합니다.");
+      return;
+    }
+    const comment = commentInput.value.trim();
+    if (!comment) return alert("댓글을 입력하세요.");
+    let nickname = "익명";
+    try {
+      const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+      if (userDoc.exists()) nickname = userDoc.data().nickname || "익명";
+    } catch {}
+    await addDoc(collection(db, "posts", String(postId), "comments"), {
+      comment,
+      authorname: nickname,
+      uid: auth.currentUser.uid,
+      timestamp: serverTimestamp(),
+    });
+    commentInput.value = "";
+    await loadComments();
+  });
+
+  // 좋아요 버튼
+  likeBtn.addEventListener("click", async () => {
+    if (!auth.currentUser) {
+      alert("로그인 후 좋아요 가능합니다.");
+      return;
+    }
+    const likeRef = doc(db, "posts", String(postId), "likes", auth.currentUser.uid);
+    const likeSnap = await getDoc(likeRef);
+    if (likeSnap.exists()) {
+      alert("이미 좋아요를 눌렀습니다.");
+      return;
+    }
+    await setDoc(likeRef, { likedAt: serverTimestamp() });
+    await updateLikeCount();
+  });
+
+  // 로그인 상태 바뀌면 댓글, 좋아요 다시 불러오기
+  onAuthStateChanged(auth, () => {
+    loadComments();
+    updateLikeCount();
+  });
+
+  // 상세 진입 시 데이터 최초 로딩
+  loadComments();
+  updateLikeCount();
+}// 상세 진입 시 데이터 최초 로딩
+  loadComments();
+  updateLikeCount();
 }

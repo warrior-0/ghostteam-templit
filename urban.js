@@ -1,4 +1,3 @@
-import { initUrbanFirebase } from "./urban-firebase.js";
 const urbanData = [
   {
     id: 1,

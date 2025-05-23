@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore, doc, getDoc, collection, addDoc, query, orderBy, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+// Firebase 설정
 const firebaseConfig = {
   apiKey: "AIzaSyAjHwHbHlCi4vgv-Ma0-3kqt-M3SLI_oF4",
   authDomain: "ghost-38f07.firebaseapp.com",
@@ -17,14 +18,15 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 export function initUrbanFirebase(postId) {
-  // 댓글 작성 이벤트
+  // 댓글/좋아요 폼 요소
   const commentForm = document.getElementById("commentForm");
   const commentInput = document.getElementById("commentInput");
   const commentList = document.getElementById("commentList");
   const likeBtn = document.getElementById("likeBtn");
   const likeCount = document.getElementById("likeCount");
 
-  // 이전에 이벤트가 있다면 제거(중복 방지, 필요시)
+  // 이벤트 중복 방지
+  if (!commentForm || !likeBtn) return;
   commentForm.onsubmit = null;
   likeBtn.onclick = null;
 
@@ -40,6 +42,7 @@ export function initUrbanFirebase(postId) {
         const c = docSnap.data();
         const li = document.createElement("li");
         li.innerHTML = `<strong>${c.authorname || "익명"}</strong>: ${c.comment}`;
+        // 본인 댓글이면 수정/삭제 버튼
         if (user && c.uid === user.uid) {
           const editBtn = document.createElement("button");
           editBtn.textContent = "수정";
@@ -142,7 +145,7 @@ export function initUrbanFirebase(postId) {
     updateLikeCount();
   });
 
-  // 상세 진입 시 데이터 최초 로딩
+  // 최초 로딩
   loadComments();
   updateLikeCount();
 }

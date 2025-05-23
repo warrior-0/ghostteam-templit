@@ -5,7 +5,8 @@
   <title>괴담 | 괴담지옥</title>
   <link rel="stylesheet" href="style.css" />
   <script src="main.js" defer></script>
-  <script tupe="module" src="urban.js" defer></script>
+  <!-- 반드시 type="module"로! -->
+  <script type="module" src="urban.js"></script>
   <script type="module" src="urban-firebase.js"></script>
 </head>
 <body>
@@ -48,11 +49,10 @@
         </div>
       </div>
       <div class="urban-list" id="urbanList">
-        <!-- 괴담 목록/상세가 JS로 렌더링됩니다 -->
+        <!-- JS로 목록/상세가 랜더링됩니다 -->
       </div>
     </section>
   </main>
-
   <footer>
     &copy; 2025 괴담지옥. All rights reserved.
   </footer>

@@ -1,3 +1,4 @@
+import { initUrbanFirebase } from "./urban-firebase.js";
 const urbanData = [
   {
     id: 1,
@@ -154,6 +155,7 @@ function renderUrbanDetail(id) {
   document.querySelector('.urban-back-btn').addEventListener('click', function(){
     window.history.back();
   });
+  initUrbanFirebase(id);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

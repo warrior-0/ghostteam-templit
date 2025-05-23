@@ -134,17 +134,19 @@ function renderUrbanDetail(id) {
       <div class="urban-item-title" style="font-size:1.5rem;">${data.title}</div>
       <div class="urban-item-meta">
         <span>좋아요 <span id="likeCount">0</span>개</span>
-        <button id="likeBtn">좋아요</button>
-        <span>${data.date}</span>
-        <span>공포 난이도: <span class="level-stars">${renderLevelStars(data.level)}</span></span>
+        <button id="likeBtn" style="margin-left:8px;">👍 좋아요</button>
+        <span style="margin-left:16px;">${data.date}</span>
+        <span style="margin-left:16px;">공포 난이도: <span class="level-stars">${renderLevelStars(data.level)}</span></span>
       </div>
       <div class="urban-item-body" style="margin-top:1.5rem; font-size:1.1rem; line-height:1.7;">${data.detail || data.body}</div>
       
+      <!-- 댓글 입력 폼 -->
       <form id="commentForm" style="margin-top:2rem; display:flex; gap:0.5rem;">
         <input id="commentInput" type="text" placeholder="댓글 입력" style="flex:1; padding:0.6rem;" />
         <button type="submit">댓글 작성</button>
       </form>
-      <ul id="commentList" style="margin-top:1rem; padding-left:0;"></ul>
+      <!-- 댓글 리스트 -->
+      <ul id="commentList" style="margin-top:1rem; padding-left:0; list-style:none;"></ul>
       
       <button class="urban-back-btn" style="margin-top:2rem; background:#222;color:#fafafa;border:none;padding:0.7rem 1.6rem;border-radius:8px;cursor:pointer;">목록으로</button>
     </div>

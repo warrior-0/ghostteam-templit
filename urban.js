@@ -1,6 +1,7 @@
-// urban.js 최상단
+// urban.js
 import { initUrbanFirebase } from './urban-firebase.js';
 
+// 더미 데이터(초기 목록용, 실제 좋아요/댓글은 firestore 연동)
 const urbanData = [
   {
     id: 1,
@@ -10,7 +11,7 @@ const urbanData = [
     filter: 'korea',
     level: 3,
     body: '어두운 밤, 골목길을 걷다가 누군가 따라오는 듯한 기분에 뒤를 돌아봤지만 아무도 없었다. 하지만 발소리는 점점 가까워졌다...',
-    detail: '이 이야기는 실제로 2021년 서울의 한 골목에서 벌어진 일입니다. 집에 가던 중, 뒤에서 발소리가 가까워지는 것을 느꼈지만 주위를 둘러봐도 아무도 없었습니다. 그러나 발소리는 계속해서 따라왔고, 결국 뛰어서 집까지 도망쳤다는 실화입니다.'
+    detail: '이 이야기는 실제로 2021년 서울의 한 골목에서 벌어진 일입니다. 집에 가던 중, 뒤에서 발소리가 가까워지는 것을 느꼈지만 주위를 둘러봐도 아무도 없었다고 합니다.'
   },
   {
     id: 2,
@@ -20,7 +21,7 @@ const urbanData = [
     filter: 'korea',
     level: 2,
     body: '우리 학교에는 밤마다 혼자 남아 있으면 들린다는 피아노 소리에 대한 소문이 있다. 실제로 경험한 친구의 이야기를 들었다...',
-    detail: '실제로 친구는 늦게까지 교실에 남아 있었는데, 아무도 없는 음악실에서 피아노 소리가 났다고 합니다. 용기를 내어 가봤지만, 음악실에는 아무도 없었습니다.'
+    detail: '실제로 친구는 늦게까지 교실에 남아 있었는데, 아무도 없는 음악실에서 피아노 소리가 났다고 합니다. 용기를 내어 가봤지만, 음악실에는 아무도 없었다고 합니다.'
   },
   {
     id: 3,
@@ -30,7 +31,7 @@ const urbanData = [
     filter: 'foreign',
     level: 4,
     body: '엘리베이터에 홀로 타고 있는데, 누군가 버튼을 누른 것도 아닌데 갑자기 13층에 멈췄다. 문이 열리고 아무도 없었다...',
-    detail: '엘리베이터를 타고 가던 중, 목적지와는 전혀 상관없는 13층에서 멈췄고, 문이 열렸지만 아무도 없었습니다. 괜히 오싹해서 바로 닫힘 버튼을 눌렀다는 이야기입니다.'
+    detail: '엘리베이터를 타고 가던 중, 목적지와는 전혀 상관없는 13층에서 멈췄고, 문이 열렸지만 아무도 없었습니다. 괜히 오싹해서 바로 닫힘 버튼을 눌렀다고 합니다.'
   },
   {
     id: 4,
@@ -40,7 +41,7 @@ const urbanData = [
     filter: 'true',
     level: 5,
     body: '이 이야기는 실제로 내가 겪은 일이다...',
-    detail: '어릴 적 시골집에서 혼자 잠을 자는데 누군가 이불을 잡아당기는 느낌이 들었습니다. 눈을 떠보니 아무도 없었고, 이불은 그대로였습니다. 그때의 기분은 아직도 잊을 수 없습니다.'
+    detail: '어릴 적 시골집에서 혼자 잠을 자는데 누군가 이불을 잡아당기는 느낌이 들었습니다. 눈을 떠보니 아무도 없었고, 이불은 그대로였습니다.'
   },
   {
     id: 5,
@@ -54,7 +55,7 @@ const urbanData = [
   }
 ];
 
-// 각 필터별 한글 제목 매핑
+// 각 필터별 한글 제목
 const filterTitles = {
   all: '전체 괴담 모음',
   korea: '한국 괴담',
@@ -71,16 +72,16 @@ function getParamFromURL(name) {
 function updateUrbanTitle(filterTypeOrTitle) {
   const titleElem = document.querySelector('.urban-title');
   if (titleElem) {
-    // 상세보기면 제목 그대로, 리스트면 한글 매핑
     titleElem.textContent = filterTitles[filterTypeOrTitle] || filterTypeOrTitle || '괴담 모음';
   }
 }
 
-// 별로 난이도 표시 (level: 1~5)
+// 별표 난이도
 function renderLevelStars(level) {
   return '★'.repeat(level) + '☆'.repeat(5 - level);
 }
 
+// 목록 랜더링
 function renderUrbanList(sortType, filterType) {
   let list = [...urbanData];
   if (filterType && filterType !== 'all') {
@@ -109,7 +110,6 @@ function renderUrbanList(sortType, filterType) {
           <div class="urban-item-body">${item.body}</div>
         </div>
       `).join('');
-    // 클릭 이벤트 등록(상세보기)
     document.querySelectorAll('.urban-item').forEach(itemElem => {
       itemElem.addEventListener('click', function(){
         const clickId = this.getAttribute('data-id');
@@ -120,6 +120,7 @@ function renderUrbanList(sortType, filterType) {
   }
 }
 
+// 상세 랜더링
 function renderUrbanDetail(id) {
   const urbanList = document.getElementById('urbanList');
   const data = urbanData.find(item => item.id === id);
@@ -128,7 +129,7 @@ function renderUrbanDetail(id) {
     updateUrbanTitle('괴담 모음');
     return;
   }
-  // 제목을 상세 제목으로 변경
+  // 제목
   const titleElem = document.querySelector('.urban-title');
   if (titleElem) titleElem.textContent = data.title;
 
@@ -145,7 +146,7 @@ function renderUrbanDetail(id) {
       
       <!-- 댓글 입력 폼 -->
       <form id="commentForm" style="margin-top:2rem; display:flex; gap:0.5rem;">
-        <input id="commentInput" type="text" placeholder="댓글 입력" style="flex:1; padding:0.6rem;" />
+        <input id="commentInput" type="text" placeholder="댓글 입력" style="flex:1; padding:0.6rem;" required />
         <button type="submit">댓글 작성</button>
       </form>
       <!-- 댓글 리스트 -->
@@ -157,9 +158,11 @@ function renderUrbanDetail(id) {
   document.querySelector('.urban-back-btn').addEventListener('click', function(){
     window.history.back();
   });
+  // ★ 댓글/좋아요 기능 연결(필수!)
   initUrbanFirebase(id);
 }
 
+// 페이지 로딩시
 document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('urbanList')) {
     let sortType = 'latest';
@@ -171,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
       renderUrbanList(sortType, filterType);
       updateUrbanTitle(filterType);
     }
-
     // 정렬 버튼
     document.querySelectorAll('.sort-btn').forEach(btn => {
       btn.addEventListener('click', function(){
@@ -182,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUrbanTitle(filterType);
       });
     });
-
     // 세부 메뉴 클릭시
     document.querySelectorAll('.submenu a').forEach(link => {
       link.addEventListener('click', function(e){
@@ -195,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUrbanTitle(filterType);
       });
     });
-
     // 뒤로가기/앞으로가기 지원
     window.addEventListener('popstate', function() {
       const idParam = getParamFromURL('id');

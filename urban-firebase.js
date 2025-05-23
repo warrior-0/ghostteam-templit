@@ -178,3 +178,12 @@ window.onload = async () => {
   await loadComments();
   await updateLikeCount();
 };
+
+// export 함수 추가 (맨 아래에)
+export async function initUrbanFirebase(postId) {
+  // 이벤트 연결, 데이터 불러오기
+  document.getElementById("commentForm").addEventListener("submit", ...);
+  document.getElementById("likeBtn").addEventListener("click", ...);
+  await loadComments();
+  await updateLikeCount();
+}

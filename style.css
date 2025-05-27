@@ -291,3 +291,43 @@ footer {
   .urban-list { gap: 1rem;}
   .urban-item { padding: 1rem;}
 }
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  width: 100%;
+  max-width: 200px;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #1e1e1e;
+  color: #eee;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+  transition: box-shadow 0.3s ease;
+}
+
+/*닉네임 입력 버튼 꾸미기*/
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 12px rgba(255, 50, 50, 0.7);
+}
+
+/*비밀번호 입력 버튼 꾸미기*/
+input[type="password"]:focus {
+  outline: none;
+  box-shadow: 0 0 12px rgba(255, 50, 50, 0.7);
+}
+
+/*이메일 입력 버튼 꾸미기*/
+input[type="email"]:focus {
+  outline: none;
+  box-shadow: 0 0 12px rgba(255, 50, 50, 0.7);
+}
+
+textarea {
+  height: 120px;
+  resize: vertical;
+}

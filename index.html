@@ -5,6 +5,108 @@
   <title>홈 | 괴담지옥</title>
   <link rel="stylesheet" href="style.css" />
   <script src="main.js" defer></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      query,
+      where,
+      orderBy,
+      doc,
+      setDoc,
+      getDoc,
+      deleteDoc,
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAjHwHbHlCi4vgv-Ma0-3kqt-M3SLI_oF4",
+      authDomain: "ghost-38f07.firebaseapp.com",
+      projectId: "ghost-38f07",
+      storageBucket: "ghost-38f07.firebasestorage.app",
+      messagingSenderId: "776945022976",
+      appId: "1:776945022976:web:105e545d39f12b5d0940e5",
+      measurementId: "G-B758ZC971V"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+
+    // 로그인 상태 감지 및 UI 업데이트
+    onAuthStateChanged(auth, (user) => {
+
+      currentUser = user;
+      if (user) {
+        document.getElementById("userStatus").innerText = `로그인: ${user.email}`;
+        document.getElementById("authSection").style.display = "none";
+        document.getElementById("postSection").style.display = "block";
+        loadPosts();
+        loadComments();
+        calculateAverageRating();
+      } else {
+        document.getElementById("userStatus").innerText = "로그인 필요";
+        document.getElementById("authSection").style.display = "block";
+        document.getElementById("postSection").style.display = "none";
+      }
+    });
+
+    // 회원가입
+    async function signUp() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const nickname = document.getElementById("nickname").value.trim();
+
+  if (!nickname) {
+    alert("닉네임을 입력해주세요.");
+    return;
+  }
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Firestore에 닉네임 저장
+    await setDoc(doc(db, "users", user.uid), {
+      email: user.email,
+      nickname: nickname,
+    });
+
+    alert("회원가입 완료! 로그인되었습니다.");
+  } catch (error) {
+    alert("회원가입 오류: " + error.message);
+  }
+}
+
+
+    // 로그인
+    async function signIn() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("로그인 성공!");
+      } catch (error) {
+        alert("로그인 오류: " + error.message);
+      }
+    }
+
+    // 로그아웃
+    async function signOutUser() {
+      await signOut(auth);
+      alert("로그아웃 되었습니다.");
+    }
 </head>
 <body>
   <header>

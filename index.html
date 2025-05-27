@@ -134,45 +134,7 @@
         list.appendChild(item);
       });
     }
-    // 게시글 수정
-    function editPost(postId, data) {
-      const newTitle = prompt("새 제목을 입력하세요", data.title);
-      const newContent = prompt("새 내용을 입력하세요", data.content);
-      if (newTitle !== null && newContent !== null) {
-        const postRef = doc(db, "posts", postId);
-        setDoc(postRef, {
-          ...data,
-          title: newTitle,
-          content: newContent,
-        }).then(() => {
-          alert("게시글이 수정되었습니다.");
-          loadPosts();
-        });
-      }
-    }
 
-    // 게시글 삭제
-    async function deletePost(postId) {
-  if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-    await deleteDoc(doc(db, "posts", postId));
-    alert("게시글이 삭제되었습니다.");
-    loadPosts();
-  }
-}
-
-    // 게시글 작성
-async function createPost() {
-  if (!currentUser) {
-    alert("로그인 후 작성 가능합니다.");
-    return;
-  }
-
-  const title = document.getElementById("title").value.trim();
-  const content = document.getElementById("content").value.trim();
-  if (!title || !content) {
-    alert("제목과 내용을 입력해주세요.");
-    return;
-  }
 
   // 유저 정보 불러오기 (닉네임)
   const userDoc = await getDoc(doc(db, "users", currentUser.uid));
@@ -348,40 +310,6 @@ let selectedRating = 0;
       document.getElementById("commentForm").addEventListener("submit", submitComment);
       document.getElementById("ratingSubmit").onclick = submitRating;
     };
-    // 메뉴 불러오기
-    fetch('menu.html')
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('menuContainer').innerHTML = html;
-
-      const menuToggle = document.querySelector('.menu-toggle');
-      const sideMenu = document.getElementById('sideMenu');
-
-      menuToggle.addEventListener('click', () => {
-        if (sideMenu.style.display === 'flex') {
-          sideMenu.style.display = 'none';
-        } else {
-          sideMenu.style.display = 'flex';
-        }
-      });
-
-      document.querySelectorAll('.toggle-btn').forEach(btn => {
-        btn.addEventListener('click', e => {
-          e.preventDefault();
-          const targetId = btn.dataset.target;
-          const submenu = document.getElementById(targetId);
-          if (submenu.style.display === 'flex') {
-            submenu.style.display = 'none';
-            btn.textContent = '+';
-          } else {
-            submenu.style.display = 'flex';
-            btn.textContent = '−';
-          }
-        });
-      });
-    })
-    .catch(err => {
-      console.error('메뉴를 불러오는 중 오류 발생:', err);
     });
 </script>
 </head>

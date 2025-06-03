@@ -1,4 +1,3 @@
-
 // community 게시글 데이터 예시
 const communityData = [
   {

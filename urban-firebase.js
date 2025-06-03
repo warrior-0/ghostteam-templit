@@ -104,6 +104,9 @@ export function initUrbanFirebase(postId) {
     e.preventDefault();
     if (!auth.currentUser) {
       alert("로그인 후 댓글 작성 가능합니다.");
+      // 권한 없음: 입력창 비우고 포커스 아웃
+      commentInput.value = "";
+      commentInput.blur();
       return;
     }
     const comment = commentInput.value.trim();

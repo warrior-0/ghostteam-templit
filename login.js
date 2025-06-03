@@ -48,6 +48,7 @@ authForm.onsubmit = async (e) => {
       await auth.signInWithEmailAndPassword(email, password);
       formSuccess.textContent = "로그인 성공! 이동 중...";
       setTimeout(() => {
+        // 이전 페이지로 이동
         window.location.href = prevUrl;
       }, 700);
     } catch (err) {

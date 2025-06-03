@@ -1,17 +1,7 @@
 // login.js: 로그인/회원가입/리다이렉트
-const firebaseConfig = {
-  apiKey: "AIzaSyAjHwHbHlCi4vgv-Ma0-3kqt-M3SLI_oF4",
-  authDomain: "ghost-38f07.firebaseapp.com",
-  projectId: "ghost-38f07",
-  storageBucket: "ghost-38f07.appspot.com",
-  messagingSenderId: "776945022976",
-  appId: "1:776945022976:web:105e545d39f12b5d0940e5",
-  measurementId: "G-B758ZC971V"
-};
-firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
-
 
 const authForm = document.getElementById("authForm");
 const toggleMode = document.getElementById("toggleMode");

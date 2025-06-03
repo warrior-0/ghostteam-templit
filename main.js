@@ -1,8 +1,8 @@
-// main.js: 헤더에 로그인/로그아웃/회원가입 직접 구현(모달/폼 내장, 별도 페이지 없이 처리)
-// BGM 토글, 드롭다운, 반응형 등 포함
+// main.js: 헤더에 로그인/회원가입/닉네임/이메일/비밀번호 입력 폼 직접 구현 (모달/폼 내장, 별도 페이지 없이 처리)
+// 참고: community.html 방식의 DOM 조작/대응, Firebase 연동
 
 document.addEventListener('DOMContentLoaded', function () {
-  // ----------- 드롭다운 메뉴 -----------
+  // ----- 드롭다운 메뉴 -----
   document.querySelectorAll('.dropdown').forEach(menu => {
     menu.addEventListener('mouseenter', function () {
       this.querySelector('.submenu').style.display = 'block';
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // ----------- BGM 토글 ----------
+  // ----- BGM 토글 -----
   let bgmPlaying = false;
   let audio = document.getElementById('bgmAudio');
   if (!audio) {
@@ -22,12 +22,9 @@ document.addEventListener('DOMContentLoaded', function () {
     audio.loop = true;
     document.body.appendChild(audio);
   }
-
   function updateBgmStatus() {
     document.getElementById('bgmStatus').textContent = bgmPlaying ? 'ON' : 'OFF';
   }
-
-  // 헤더 버튼 컨테이너 생성 및 삽입
   const headerInner = document.querySelector('.header-inner');
   let btnWrapper = document.getElementById('bgmToggleContainer');
   if (!btnWrapper) {
@@ -42,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
     <button id="inlineSignUpBtn" style="display:none;">회원가입</button>
     <button id="inlineLogoutBtn" style="display:none;">로그아웃</button>
   `;
-
   document.getElementById('bgmToggleBtn').onclick = function () {
     if (bgmPlaying) {
       audio.pause();
@@ -55,8 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
   };
   updateBgmStatus();
 
-  // ----------- 헤더 인증 모달 -----------
-
+  // ----- 헤더 인증 모달 -----
   if (!document.getElementById('headerAuthModal')) {
     const modal = document.createElement('div');
     modal.id = 'headerAuthModal';
@@ -73,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(modal);
   }
 
-  // -------- Firebase 연결 --------
+  // ----- Firebase 연결 -----
   let auth = null, db = null;
   function waitForFirebaseAndSetup(cb, maxWait = 20) {
     if (window.firebase && window.firebase.auth && window.firebase.firestore) {
@@ -86,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(() => waitForFirebaseAndSetup(cb, maxWait - 1), 200);
     }
   }
-
   waitForFirebaseAndSetup(setupHeaderAuth);
 
   function setupHeaderAuth() {
@@ -112,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function showLoginForm() {
       modal.innerHTML = `
         <div style="font-size:1.2rem;font-weight:600;margin-bottom:1rem;">로그인</div>
-        <form id="headerLoginForm">
+        <form id="headerLoginForm" autocomplete="on">
           <input type="email" id="headerLoginEmail" placeholder="이메일" required autocomplete="username"
             style="width:100%;margin-bottom:0.6rem;padding:0.6rem;border-radius:6px;border:1px solid #333;background:#181818;color:#fafafa;">
           <input type="password" id="headerLoginPw" placeholder="비밀번호" required autocomplete="current-password"
@@ -153,11 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
       };
     }
 
-    // 회원가입 폼
+    // 회원가입 폼 (이메일, 비밀번호, 닉네임 입력)
     function showSignUpForm() {
       modal.innerHTML = `
         <div style="font-size:1.2rem;font-weight:600;margin-bottom:1rem;">회원가입</div>
-        <form id="headerSignUpForm">
+        <form id="headerSignUpForm" autocomplete="on">
           <input type="email" id="headerSignUpEmail" placeholder="이메일" required autocomplete="username"
             style="width:100%;margin-bottom:0.6rem;padding:0.6rem;border-radius:6px;border:1px solid #333;background:#181818;color:#fafafa;">
           <input type="password" id="headerSignUpPw" placeholder="비밀번호" required autocomplete="new-password"

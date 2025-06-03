@@ -103,7 +103,7 @@ function renderUrbanList(sortType, filterType) {
         <div class="urban-item" data-id="${item.id}" style="cursor:pointer;">
           <div class="urban-item-title">${item.title}</div>
           <div class="urban-item-meta">
-            <span>좋아요 <span id="likeCount">0</span>개</span>
+            <span>좋아요 ${item.likes}개</span>
             <span>${item.date}</span>
             <span>공포 난이도: <span class="level-stars">${renderLevelStars(item.level)}</span></span>
           </div>

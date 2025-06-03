@@ -1,4 +1,4 @@
-// ✅ main.js: 드롭다운 메뉴 + 홈 슬라이더 + 헤더 bgm/로그인 버튼
+// ✅ main.js: 드롭다운 메뉴 + 홈 슬라이더 + 헤더 bgm/로그인/로그아웃 버튼 + 상태 감지
 
 document.addEventListener('DOMContentLoaded', function () {
   // ----------- 드롭다운 메뉴 -----------
@@ -40,57 +40,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ----------- 홈 인기 괴담 슬라이더 -----------
   const urbanData = [
+    // ... (기존 urbanData 배열 그대로) ...
     {
-      id: 1,
-      title: '밤길에 들리는 발소리',
-      likes: 13,
-      date: '2025-05-20',
-      filter: 'korea',
-      level: 3,
+      id: 1, title: '밤길에 들리는 발소리', likes: 13, date: '2025-05-20', filter: 'korea', level: 3,
       thumb: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
       body: '어두운 밤, 골목길을 걷다가 누군가 따라오는 듯한 기분에 뒤를 돌아봤지만 아무도 없었다. 하지만 발소리는 점점 가까워졌다...',
       detail: '이 이야기는 실제로 2021년 서울의 한 골목에서 벌어진 일입니다. 집에 가던 중, 뒤에서 발소리가 가까워지는 것을 느꼈지만 주위를 둘러봐도 아무도 없었습니다...'
     },
+    // ... (나머지 urbanData 항목도 그대로) ...
     {
-      id: 2,
-      title: '학교의 괴담',
-      likes: 25,
-      date: '2025-05-18',
-      filter: 'korea',
-      level: 2,
+      id: 2, title: '학교의 괴담', likes: 25, date: '2025-05-18', filter: 'korea', level: 2,
       thumb: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
       body: '우리 학교에는 밤마다 혼자 남아 있으면 들린다는 피아노 소리에 대한 소문이 있다. 실제로 경험한 친구의 이야기를 들었다...',
       detail: '실제로 친구는 늦게까지 교실에 남아 있었는데, 아무도 없는 음악실에서 피아노 소리가 났다고 합니다. 용기를 내어 가봤지만, 음악실에는 아무도 없었어요...'
     },
     {
-      id: 3,
-      title: '기묘한 아파트 엘리베이터',
-      likes: 9,
-      date: '2025-05-21',
-      filter: 'foreign',
-      level: 4,
+      id: 3, title: '기묘한 아파트 엘리베이터', likes: 9, date: '2025-05-21', filter: 'foreign', level: 4,
       thumb: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3f41?auto=format&fit=crop&w=400&q=80',
       body: '엘리베이터에 홀로 타고 있는데, 누군가 버튼을 누른 것도 아닌데 갑자기 13층에 멈췄다. 문이 열리고 아무도 없었다...',
       detail: '엘리베이터를 타고 가던 중, 목적지와는 전혀 상관없는 13층에서 멈췄고, 문이 열렸지만 아무도 없었습니다. 괜히 오싹해서 바로 닫힘 버튼을 눌렀어요...'
     },
     {
-      id: 4,
-      title: '실제로 겪은 이야기',
-      likes: 18,
-      date: '2025-05-19',
-      filter: 'true',
-      level: 5,
+      id: 4, title: '실제로 겪은 이야기', likes: 18, date: '2025-05-19', filter: 'true', level: 5,
       thumb: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=400&q=80',
       body: '이 이야기는 실제로 내가 겪은 일이다...',
       detail: '어릴 적 시골집에서 혼자 잠을 자는데 누군가 이불을 잡아당기는 느낌이 들었습니다. 눈을 떠보니 아무도 없었고, 이불은 그대로였습니다.'
     },
     {
-      id: 5,
-      title: '사용자 제보 괴담',
-      likes: 11,
-      date: '2025-05-17',
-      filter: 'user',
-      level: 1,
+      id: 5, title: '사용자 제보 괴담', likes: 11, date: '2025-05-17', filter: 'user', level: 1,
       thumb: 'https://images.unsplash.com/photo-1510936111840-6cef99faf2a9?auto=format&fit=crop&w=400&q=80',
       body: '이 괴담은 사용자에게 제보받은 내용입니다...',
       detail: '사용자 제보에 따르면, 한밤중에 집에서 혼자 있는데 누군가 문을 두드리는 소리가 들렸다고 합니다. 하지만 확인해보니 아무도 없었다고 합니다...'
@@ -141,8 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateSlider(); // 초기 위치 설정
   }
 
-  // ----------- 헤더 BGM/로그인 버튼 추가 -----------
-  // 오디오
+  // ----------- 헤더 BGM/로그인/로그아웃 버튼 추가 -----------
   if (!document.getElementById('bgmAudio')) {
     const audioEl = document.createElement('audio');
     audioEl.id = 'bgmAudio';
@@ -193,12 +169,64 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ----------- 로그인/로그아웃 버튼 동작 (기본: 로그인만, 확장 가능) -----------
-  const loginBtn = document.getElementById('loginLogoutBtn');
-  if (loginBtn) {
-    loginBtn.onclick = function () {
-      sessionStorage.setItem("redirectAfterAuth", window.location.pathname + window.location.search);
-      window.location.href = "login.html";
+  // ----------- 로그인/로그아웃 버튼 동작 + 상태 감지 -----------
+  // Firebase Auth 연동
+  function loadFirebaseAuth(callback) {
+    if (window.firebase && window.firebase.auth) {
+      callback(window.firebase);
+      return;
+    }
+    // 동적으로 CDN import
+    const firebaseAppScript = document.createElement('script');
+    firebaseAppScript.src = "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    firebaseAppScript.onload = () => {
+      const firebaseAuthScript = document.createElement('script');
+      firebaseAuthScript.src = "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      firebaseAuthScript.onload = () => {
+        if (!window.firebase.apps.length) {
+          window.firebase.initializeApp({
+            apiKey: "AIzaSyAjHwHbHlCi4vgv-Ma0-3kqt-M3SLI_oF4",
+            authDomain: "ghost-38f07.firebaseapp.com",
+            projectId: "ghost-38f07",
+            storageBucket: "ghost-38f07.appspot.com",
+            messagingSenderId: "776945022976",
+            appId: "1:776945022976:web:105e545d39f12b5d0940e5",
+            measurementId: "G-B758ZC971V"
+          });
+        }
+        callback(window.firebase);
+      };
+      document.body.appendChild(firebaseAuthScript);
     };
+    document.body.appendChild(firebaseAppScript);
   }
+
+  function setLoginLogoutBtn(isLoggedIn) {
+    const loginBtn = document.getElementById('loginLogoutBtn');
+    if (loginBtn) {
+      loginBtn.textContent = isLoggedIn ? "로그아웃" : "로그인";
+      loginBtn.onclick = function () {
+        if (!isLoggedIn) {
+          sessionStorage.setItem("redirectAfterAuth", window.location.pathname + window.location.search);
+          window.location.href = "login.html";
+        } else {
+          // 로그아웃
+          loadFirebaseAuth((firebase) => {
+            firebase.auth().signOut().then(() => {
+              setLoginLogoutBtn(false);
+              alert("로그아웃 되었습니다.");
+            });
+          });
+        }
+      };
+    }
+  }
+
+  // 인증 상태 감지 및 버튼 전환
+  loadFirebaseAuth((firebase) => {
+    const auth = firebase.auth();
+    auth.onAuthStateChanged(function(user){
+      setLoginLogoutBtn(!!user);
+    });
+  });
 });

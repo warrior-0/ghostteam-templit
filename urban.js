@@ -84,6 +84,7 @@ function renderLevelStars(level) {
 // 목록 랜더링
 function renderUrbanList(sortType, filterType) {
   let list = [...urbanData];
+  const data = urbanData.find(item => item.id === id);
   if (filterType && filterType !== 'all') {
     list = list.filter(item => item.filter === filterType);
   }
@@ -103,7 +104,7 @@ function renderUrbanList(sortType, filterType) {
         <div class="urban-item" data-id="${item.id}" style="cursor:pointer;">
           <div class="urban-item-title">${item.title}</div>
           <div class="urban-item-meta">
-            <span>좋아요 ${item.likes}개</span>
+            <span>좋아요 ${data.likes}개</span>
             <span>${item.date}</span>
             <span>공포 난이도: <span class="level-stars">${renderLevelStars(item.level)}</span></span>
           </div>

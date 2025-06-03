@@ -1,8 +1,8 @@
-// Firestore 연동 커뮤니티 게시판: 게시글 작성(CREATE), 신고 기능 제외
+// Firestore 연동 커뮤니티 게시판: 게시글 작성(CREATE), 신고 기능 없음
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
-  getFirestore, collection, doc, getDocs, getDoc, addDoc, setDoc, deleteDoc, query, orderBy, where, serverTimestamp
+  getFirestore, collection, doc, getDocs, getDoc, addDoc, query, orderBy, where, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
   getAuth, onAuthStateChanged
@@ -102,6 +102,38 @@ async function renderCommunityList(sortType, boardType) {
   }
 }
 
+// 게시글 상세(작성/수정/삭제 없이 읽기만, 신고 없음)
+async function renderCommunityDetail(postId) {
+  const communityList = document.getElementById('communityList');
+  const ref = doc(db, "posts", postId);
+  const snap = await getDoc(ref);
+  const data = snap.exists() ? snap.data() : null;
+  if (!data) {
+    communityList.innerHTML = `<div style="color:#bbb; padding:2rem 0;">게시글을 찾을 수 없습니다.</div>`;
+    updateCommunityTitle('자유게시판');
+    return;
+  }
+  // 제목 변경
+  const titleElem = document.querySelector('.community-title');
+  if (titleElem) titleElem.textContent = data.title;
+
+  communityList.innerHTML = `
+    <div class="community-item community-detail">
+      <div class="community-item-title" style="font-size:1.5rem;">${data.title}</div>
+      <div class="community-item-meta">
+        <span>좋아요 ${data.likes || 0}개</span>
+        <span style="margin-left:16px;">${data.created?.toDate ? data.created.toDate().toISOString().slice(0, 10) : ''}</span>
+        <span style="margin-left:16px;">${boardTitles[data.board]}</span>
+      </div>
+      <div class="community-item-body" style="margin-top:1.5rem; font-size:1.1rem; line-height:1.7;">${data.body}</div>
+      <button class="community-back-btn" style="margin-top:2rem; background:#222;color:#fafafa;border:none;padding:0.7rem 1.6rem;border-radius:8px;cursor:pointer;">목록으로</button>
+    </div>
+  `;
+  document.querySelector('.community-back-btn').addEventListener('click', function () {
+    window.history.back();
+  });
+}
+
 // 게시글 작성 폼
 function showCreatePostForm(boardType) {
   const communityList = document.getElementById('communityList');
@@ -160,4 +192,55 @@ onAuthStateChanged(auth, async (user) => {
   currentUser = user;
 });
 
-// ... 이하 생략 ...
+document.addEventListener('DOMContentLoaded', async () => {
+  if (document.getElementById('communityList')) {
+    let sortType = 'latest';
+    let boardType = getParamFromURL('board') || 'free';
+    const idParam = getParamFromURL('id');
+    if (idParam) {
+      renderCommunityDetail(idParam);
+    } else {
+      renderCommunityList(sortType, boardType);
+      updateCommunityTitle(boardType);
+    }
+
+    // 정렬 버튼
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        sortType = this.dataset.sort;
+        renderCommunityList(sortType, boardType);
+        updateCommunityTitle(boardType);
+      });
+    });
+
+    // 드롭다운 메뉴
+    const communityMenu = document.getElementById('communityMenu');
+    if (communityMenu) {
+      communityMenu.querySelectorAll('.submenu a').forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const url = new URL(this.href);
+          const newBoard = url.searchParams.get('board') || 'free';
+          boardType = newBoard;
+          window.history.pushState({}, '', url.pathname + url.search);
+          renderCommunityList(sortType, boardType);
+          updateCommunityTitle(boardType);
+        });
+      });
+    }
+
+    // 뒤로가기 지원
+    window.addEventListener('popstate', function () {
+      const idParam = getParamFromURL('id');
+      boardType = getParamFromURL('board') || 'free';
+      if (idParam) {
+        renderCommunityDetail(idParam);
+      } else {
+        renderCommunityList(sortType, boardType);
+        updateCommunityTitle(boardType);
+      }
+    });
+  }
+});

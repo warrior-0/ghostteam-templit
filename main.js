@@ -1,5 +1,18 @@
 // ✅ main.js: 드롭다운 메뉴 + 홈 슬라이더 + 헤더 bgm/로그인·로그아웃 버튼 (로그인만 기본, 상태에 따라 로그아웃으로 토글)
 
+// Firebase SDK가 없거나 초기화 안됐으면 초기화
+if (!window.firebase?.apps?.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyAjHwHbHlCi4vgv-Ma0-3kqt-M3SLI_oF4",
+    authDomain: "ghost-38f07.firebaseapp.com",
+    projectId: "ghost-38f07",
+    storageBucket: "ghost-38f07.appspot.com",
+    messagingSenderId: "776945022976",
+    appId: "1:776945022976:web:105e545d39f12b5d0940e5",
+    measurementId: "G-B758ZC971V"
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   // ----------- 드롭다운 메뉴 -----------
   function setupDropdownMenus() {
@@ -214,6 +227,8 @@ document.addEventListener('DOMContentLoaded', function () {
       loginLogoutBtn.onclick = function () {
         firebaseAuth.signOut().then(() => {
           alert("로그아웃 되었습니다.");
+          // 새로고침 또는 상태 반영
+          window.location.reload();
         });
       };
     }

@@ -84,7 +84,6 @@ function renderLevelStars(level) {
 // 목록 랜더링
 function renderUrbanList(sortType, filterType) {
   let list = [...urbanData];
-  const data = urbanData.find(item => item.id === id);
   if (filterType && filterType !== 'all') {
     list = list.filter(item => item.filter === filterType);
   }

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>로그인 | 괴담지옥</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <script src="login.js" defer></script>
+  <style>
+    .login-container {
+      max-width: 370px;
+      margin: 3.5rem auto 0 auto;
+      background: #191919;
+      border-radius: 14px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+      padding: 2.3rem 2.2rem 2rem 2.2rem;
+      color: #fafafa;
+      font-size: 1.08rem;
+    }
+    .login-container h2 {
+      margin-bottom: 1.3rem;
+      font-size: 1.6rem;
+      color: #e01c1c;
+      text-align: center;
+    }
+    .login-container label {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: #ccc;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: #232323;
+      color: #fafafa;
+      font-size: 1.04rem;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 0.7rem;
+      background: #e01c1c;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 1.08rem;
+      cursor: pointer;
+      margin-bottom: 0.7rem;
+      transition: background 0.18s;
+    }
+    .login-container button:hover {
+      background: #d11717;
+    }
+    .login-container .toggle-link {
+      color: #bbb;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.97rem;
+      display: block;
+      margin-top: 0.2rem;
+      text-align: right;
+    }
+    .login-container .error {
+      color: #ff5959;
+      margin-bottom: 0.8rem;
+      margin-top: -0.5rem;
+      min-height: 24px;
+      font-size: 0.97rem;
+    }
+    .login-container .success {
+      color: #4caf50;
+      margin-bottom: 0.8rem;
+      min-height: 24px;
+      font-size: 0.97rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container" id="loginBox">
+    <h2 id="formTitle">로그인</h2>
+    <form id="authForm">
+      <label for="email">이메일</label>
+      <input type="email" id="email" required placeholder="이메일 입력" autocomplete="username" />
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" required placeholder="비밀번호 입력" autocomplete="current-password" />
+      <div id="nicknameBox" style="display:none;">
+        <label for="nickname">닉네임</label>
+        <input type="text" id="nickname" placeholder="닉네임 입력 (회원가입시)" />
+      </div>
+      <div class="error" id="formError"></div>
+      <div class="success" id="formSuccess"></div>
+      <button type="submit" id="submitBtn">로그인</button>
+    </form>
+    <span class="toggle-link" id="toggleMode">회원가입</span>
+  </div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 // ✅ main.js: 드롭다운 메뉴 + 홈 슬라이더 + 헤더 bgm/로그인·로그아웃 버튼 (로그인만 기본, 상태에 따라 로그아웃으로 토글)
 
+
 // Firebase SDK가 없거나 초기화 안됐으면 초기화
 if (!window.firebase?.apps?.length) {
   firebase.initializeApp({

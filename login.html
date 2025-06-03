@@ -4,9 +4,24 @@
   <meta charset="UTF-8" />
   <title>로그인 | 괴담지옥</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <script>
+    // Firebase 기본 초기화 (중복 방지)
+    if (!window.firebase.apps?.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyAjHwHbHlCi4vgv-Ma0-3kqt-M3SLI_oF4",
+        authDomain: "ghost-38f07.firebaseapp.com",
+        projectId: "ghost-38f07",
+        storageBucket: "ghost-38f07.appspot.com",
+        messagingSenderId: "776945022976",
+        appId: "1:776945022976:web:105e545d39f12b5d0940e5",
+        measurementId: "G-B758ZC971V"
+      });
+    }
+  </script>
   <script src="login.js" defer></script>
   <style>
     .login-container {

@@ -98,16 +98,16 @@ function renderUrbanList(sortType, filterType) {
   if (list.length === 0) {
     urbanList.innerHTML = `<div style="color:#bbb; padding:2rem 0;">등록된 괴담이 없습니다.</div>`;
   } else {
-    urbanList.innerHTML = (`
-    <div class="urban-item urban-detail">
-      <div class="urban-item-title" style="font-size:1.5rem;">${data.title}</div>
-      <div class="urban-item-meta">
-        <span>좋아요 <span id="likeCount">0</span>개</span>
-        <button id="likeBtn" style="margin-left:8px;">👍 좋아요</button>
-        <span style="margin-left:16px;">${data.date}</span>
-        <span style="margin-left:16px;">공포 난이도: <span class="level-stars">${renderLevelStars(data.level)}</span></span>
-      </div>
-      <div class="urban-item-body" style="margin-top:1.5rem; font-size:1.1rem; line-height:1.7;">${data.detail || data.body}</div>
+    urbanList.innerHTML =
+      list.map(item => `
+        <div class="urban-item" data-id="${item.id}" style="cursor:pointer;">
+          <div class="urban-item-title">${item.title}</div>
+          <div class="urban-item-meta">
+            <span>좋아요 <span id="likeCount">0</span>개</span>
+            <span>${item.date}</span>
+            <span>공포 난이도: <span class="level-stars">${renderLevelStars(item.level)}</span></span>
+          </div>
+          <div class="urban-item-body">${item.body}</div>
         </div>
       `).join('');
     document.querySelectorAll('.urban-item').forEach(itemElem => {

@@ -147,7 +147,7 @@ if (!document.getElementById('bgmAudio')) {
     document.body.appendChild(audioEl); // 이건 그대로 body에 넣는 게 좋음
   }
 
-  // 헤더 내부에 버튼 삽입
+  // 헤더 내부에 BGM 버튼 + 로그인 버튼 삽입
   const headerInner = document.querySelector('.header-inner');
   if (headerInner && !document.getElementById('bgmToggleContainer')) {
     const btnWrapper = document.createElement('div');
@@ -155,6 +155,7 @@ if (!document.getElementById('bgmAudio')) {
     btnWrapper.id = 'bgmToggleContainer';
     btnWrapper.innerHTML = `
       <button id="bgmToggleBtn">🎵 <span id="bgmStatus">OFF</span></button>
+      <button id="loginLogoutBtn">로그인</button>
     `;
     headerInner.appendChild(btnWrapper);
   }
@@ -186,4 +187,66 @@ if (!document.getElementById('bgmAudio')) {
       updateState(isPlaying);
     });
   }
+// --- 로그인/로그아웃 버튼 동작 ---
+  const loginBtn = document.getElementById('loginLogoutBtn');
+  // Firebase Auth CDN 동적 로드
+  function loadFirebaseAuth(callback) {
+    if (window.firebase && window.firebase.auth) {
+      callback();
+      return;
+    }
+    const firebaseScript = document.createElement('script');
+    firebaseScript.src = "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    firebaseScript.onload = () => {
+      const authScript = document.createElement('script');
+      authScript.src = "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      authScript.onload = () => {
+        if (!window.firebase.apps.length) {
+          window.firebase.initializeApp({
+            apiKey: "AIzaSyAjHwHbHlCi4vgv-Ma0-3kqt-M3SLI_oF4",
+            authDomain: "ghost-38f07.firebaseapp.com",
+            projectId: "ghost-38f07",
+            storageBucket: "ghost-38f07.appspot.com",
+            messagingSenderId: "776945022976",
+            appId: "1:776945022976:web:105e545d39f12b5d0940e5",
+            measurementId: "G-B758ZC971V"
+          });
+        }
+        callback();
+      };
+      document.body.appendChild(authScript);
+    };
+    document.body.appendChild(firebaseScript);
+  }
+
+  // 로그인/로그아웃 버튼 상태 UI 갱신
+  function updateLoginUI(isLoggedIn) {
+    if (!loginBtn) return;
+    loginBtn.textContent = isLoggedIn ? '로그아웃' : '로그인';
+  }
+
+  // 인증 상태 확인 (매 페이지 새로고침 시)
+  function setupAuthButton() {
+    loadFirebaseAuth(() => {
+      const auth = firebase.auth();
+      auth.onAuthStateChanged(function(user){
+        updateLoginUI(!!user);
+      });
+
+      // 버튼 클릭 시
+      loginBtn.onclick = function () {
+        const isLoggedIn = !!auth.currentUser;
+        if (!isLoggedIn) {
+          sessionStorage.setItem("redirectAfterAuth", window.location.pathname + window.location.search);
+          window.location.href = "login.html";
+        } else {
+          auth.signOut().then(() => {
+            updateLoginUI(false);
+            alert("로그아웃 되었습니다.");
+          });
+        }
+      };
+    });
+  }
+  setupAuthButton();
 });

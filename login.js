@@ -12,6 +12,7 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+
 const authForm = document.getElementById("authForm");
 const toggleMode = document.getElementById("toggleMode");
 const formTitle = document.getElementById("formTitle");

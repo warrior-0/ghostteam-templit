@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ----------- 헤더 BGM/로그인 버튼 추가 -----------
+  // 오디오
   if (!document.getElementById('bgmAudio')) {
     const audioEl = document.createElement('audio');
     audioEl.id = 'bgmAudio';
@@ -150,18 +151,19 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(audioEl);
   }
 
-  // 헤더 내부에 버튼 삽입 (BGM + 로그인/로그아웃)
+  // 항상 버튼을 새로 그리기
   const headerInner = document.querySelector('.header-inner');
-  if (headerInner && !document.getElementById('bgmToggleContainer')) {
-    const btnWrapper = document.createElement('div');
+  let btnWrapper = document.getElementById('bgmToggleContainer');
+  if (!btnWrapper) {
+    btnWrapper = document.createElement('div');
     btnWrapper.className = 'bgm-header-control';
     btnWrapper.id = 'bgmToggleContainer';
-    btnWrapper.innerHTML = `
-      <button id="bgmToggleBtn">🎵 <span id="bgmStatus">OFF</span></button>
-      <button id="loginLogoutBtn">로그인</button>
-    `;
     headerInner.appendChild(btnWrapper);
   }
+  btnWrapper.innerHTML = `
+    <button id="bgmToggleBtn">🎵 <span id="bgmStatus">OFF</span></button>
+    <button id="loginLogoutBtn">로그인</button>
+  `;
 
   // BGM 제어
   const bgmBtn = document.getElementById('bgmToggleBtn');
@@ -195,7 +197,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const loginBtn = document.getElementById('loginLogoutBtn');
   if (loginBtn) {
     loginBtn.onclick = function () {
-      // 로그인 페이지로 이동 (+ 이전 페이지 기억)
       sessionStorage.setItem("redirectAfterAuth", window.location.pathname + window.location.search);
       window.location.href = "login.html";
     };

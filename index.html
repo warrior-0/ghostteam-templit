@@ -351,7 +351,7 @@ let selectedRating = 0;
 </script>
 </head>
 <body>
-  <header>
+    <header>
     <div class="header-inner">
       <div style="display: flex; align-items: center;">
         <div id="menuContainer"></div>
@@ -372,50 +372,48 @@ let selectedRating = 0;
                 <a href="urban.html?filter=user">사용자 제보 괴담</a>
               </div>
             </li>
-            <li><a href="community.html">커뮤니티</a></li>
-            <li><a href="about.html">정보</a></li>
+            <li id="communityMenu">
+              <div class="dropdown" tabindex="0">
+                <a href="community.html">커뮤니티</a>
+                <span class="dropdown-arrow">&#9660;</span>
+              </div>
+              <div class="submenu">
+                <a href="community.html?board=free">자유게시판</a>
+                <a href="community.html?board=notice">이벤트/공지</a>
+                <a href="community.html?board=archive">자료실</a>
+              </div>
+            </li>
+            <li id="aboutMenu">
+              <div class="dropdown" tabindex="0">
+                <a href="about.html">정보</a>
+                <span class="dropdown-arrow">&#9660;</span>
+              </div>
+              <div class="submenu">
+                <a href="about.html?page=intro">사이트 소개</a>
+                <a href="about.html?page=greeting">운영자 인사말</a>
+                <a href="about.html?page=contact">문의/제보하기</a>
+              </div>
+            </li>
           </ul>
-          <section id="authSection">
-            <input type="email" id="email" placeholder="이메일" />
-            <input type="password" id="password" placeholder="비밀번호" />
-            <input type="text" id="nickname" placeholder="닉네임" />
-            <button id="signUpBtn">회원가입</button>
-            <button id="signInBtn">로그인</button>
-          </section>
         </nav>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="main-section">
-      <h2>인기 괴담</h2>
-      <div class="slider-area">
-        <div class="slider-arrow" id="sliderPrev">&lt;</div>
-        <div class="product-list">
-          <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Classic Spring" />
-            <div class="product-title">Classic Spring</div>
-            <div class="rating">★★★★★</div>
-            <div class="product-price">$120.00</div>
-          </div>
-          <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Air Force 1 X" />
-            <div class="product-title">Air Force 1 X</div>
-            <div class="rating">★★★★★</div>
-            <div class="product-price">$90.00</div>
-          </div>
-          <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=400&q=80" alt="Love Nana ‘20" />
-            <div class="product-title">Love Nana ‘20</div>
-            <div class="rating">★★★★★</div>
-            <div class="product-price">$150.00</div>
-          </div>
+  <section class="main-section">
+    <h2 class="slider-title">인기 괴담</h2>
+    <div class="slider-area">
+      <div class="slider-arrow" id="sliderPrev">&lt;</div>
+      <div class="product-slider-wrapper">
+        <div class="product-slider" id="homeSlider">
+          <!-- JS로 카드 삽입 -->
         </div>
-        <div class="slider-arrow" id="sliderNext">&gt;</div>
       </div>
-    </section>
-  </main>
+      <div class="slider-arrow" id="sliderNext">&gt;</div>
+    </div>
+  </section>
+</main>
 
   <footer>
     &copy; 2025 괴담지옥. All rights reserved.

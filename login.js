@@ -1,5 +1,3 @@
-// login.js: 로그인/회원가입/리다이렉트
-
 const auth = firebase.auth();
 const db = firebase.firestore();
 
@@ -13,10 +11,9 @@ const formSuccess = document.getElementById("formSuccess");
 
 let mode = "login"; // or "register"
 
-// 이전 페이지 기억
+// 이전 페이지 기억 (없으면 홈으로)
 const prevUrl = sessionStorage.getItem("redirectAfterAuth") || "/";
 
-// 모드 전환
 toggleMode.onclick = function () {
   if (mode === "login") {
     mode = "register";
@@ -48,7 +45,6 @@ authForm.onsubmit = async (e) => {
       await auth.signInWithEmailAndPassword(email, password);
       formSuccess.textContent = "로그인 성공! 이동 중...";
       setTimeout(() => {
-        // 이전 페이지로 이동
         window.location.href = prevUrl;
       }, 700);
     } catch (err) {

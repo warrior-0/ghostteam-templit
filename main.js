@@ -1,4 +1,4 @@
-// ✅ main.js: 드롭다운 메뉴 + 홈 슬라이더 + 헤더 bgm/로그인/회원가입/로그아웃 버튼 (firebase 상태 반영)
+// ✅ main.js: 드롭다운 메뉴 + 홈 슬라이더 + 헤더 bgm/로그인·로그아웃 버튼 (로그인만 기본, 상태에 따라 로그아웃으로 토글)
 
 document.addEventListener('DOMContentLoaded', function () {
   // ----------- 드롭다운 메뉴 -----------
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateSlider(); // 초기 위치 설정
   }
 
-  // ----------- 헤더 BGM/로그인/회원가입/로그아웃 버튼 추가 -----------
+  // ----------- 헤더 BGM/로그인·로그아웃 버튼 추가(로그인만 기본, 상태에 따라 로그아웃) -----------
   if (!document.getElementById('bgmAudio')) {
     const audioEl = document.createElement('audio');
     audioEl.id = 'bgmAudio';
@@ -161,9 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   btnWrapper.innerHTML = `
     <button id="bgmToggleBtn">🎵 <span id="bgmStatus">OFF</span></button>
-    <button id="loginBtn">로그인</button>
-    <button id="registerBtn">회원가입</button>
-    <button id="logoutBtn" style="display:none;">로그아웃</button>
+    <button id="loginLogoutBtn">로그인</button>
   `;
 
   // BGM 제어
@@ -190,9 +188,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ----------- 로그인/회원가입/로그아웃 버튼 동작 + firebase 인증 상태 반영 -----------
-  function setupAuthButtons() {
-    // firebase가 window에 이미 초기화되어 있다고 가정
+  // ----------- 로그인/로그아웃 버튼 동작 + firebase 인증 상태 반영 -----------
+  function setupAuthButton() {
     let firebaseAuth = null;
     if (window.firebase && window.firebase.auth) {
       firebaseAuth = window.firebase.auth();
@@ -202,37 +199,31 @@ document.addEventListener('DOMContentLoaded', function () {
       return; // firebase가 없으면 종료
     }
 
-    const loginBtn = document.getElementById('loginBtn');
-    const registerBtn = document.getElementById('registerBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const loginLogoutBtn = document.getElementById('loginLogoutBtn');
 
     // 버튼 동작
-    loginBtn.onclick = function () {
-      sessionStorage.setItem("redirectAfterAuth", window.location.pathname + window.location.search);
-      window.location.href = "login.html";
-    };
-    registerBtn.onclick = function () {
-      sessionStorage.setItem("redirectAfterAuth", window.location.pathname + window.location.search);
-      window.location.href = "register.html";
-    };
-    logoutBtn.onclick = function () {
-      firebaseAuth.signOut().then(() => {
-        alert("로그아웃 되었습니다.");
-      });
-    };
+    function setLoginMode() {
+      loginLogoutBtn.textContent = "로그인";
+      loginLogoutBtn.onclick = function () {
+        sessionStorage.setItem("redirectAfterAuth", window.location.pathname + window.location.search);
+        window.location.href = "login.html";
+      };
+    }
+    function setLogoutMode() {
+      loginLogoutBtn.textContent = "로그아웃";
+      loginLogoutBtn.onclick = function () {
+        firebaseAuth.signOut().then(() => {
+          alert("로그아웃 되었습니다.");
+        });
+      };
+    }
 
     // 인증 상태 감지
     firebaseAuth.onAuthStateChanged(function(user) {
       if (user) {
-        // 로그인 상태
-        loginBtn.style.display = "none";
-        registerBtn.style.display = "none";
-        logoutBtn.style.display = "";
+        setLogoutMode();
       } else {
-        // 로그아웃 상태
-        loginBtn.style.display = "";
-        registerBtn.style.display = "";
-        logoutBtn.style.display = "none";
+        setLoginMode();
       }
     });
   }
@@ -245,6 +236,5 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(() => waitForFirebaseAndSetup(cb, maxWait - 1), 200);
     }
   }
-  waitForFirebaseAndSetup(setupAuthButtons);
-
+  waitForFirebaseAndSetup(setupAuthButton);
 });

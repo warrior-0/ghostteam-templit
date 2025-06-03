@@ -31,25 +31,44 @@
                 <a href="urban.html?filter=user">사용자 제보 괴담</a>
               </div>
             </li>
-            <li><a href="community.html">커뮤니티</a></li>
-            <li><a href="about.html">정보</a></li>
+            <li id="communityMenu">
+              <div class="dropdown" tabindex="0">
+                <a href="community.html">커뮤니티</a>
+                <span class="dropdown-arrow">&#9660;</span>
+              </div>
+              <div class="submenu">
+                <a href="community.html?board=free">자유게시판</a>
+                <a href="community.html?board=notice">이벤트/공지</a>
+                <a href="community.html?board=archive">자료실</a>
+              </div>
+            </li>
+            <li id="aboutMenu">
+              <div class="dropdown" tabindex="0">
+                <a href="about.html">정보</a>
+                <span class="dropdown-arrow">&#9660;</span>
+              </div>
+              <div class="submenu">
+                <a href="about.html?page=intro">사이트 소개</a>
+                <a href="about.html?page=greeting">운영자 인사말</a>
+                <a href="about.html?page=contact">문의/제보하기</a>
+              </div>
+            </li>
           </ul>
         </nav>
       </div>
     </div>
   </header>
+
   <main>
-    <section style="max-width: 900px; margin: 2.5rem auto 0 auto; padding: 0 2rem;">
-      <div class="urban-header">
-        <div class="urban-title">괴담 모음</div>
-        <div class="urban-sort">
-          <button class="sort-btn active" data-sort="latest">최신순</button>
-          <button class="sort-btn" data-sort="popular">인기순</button>
-          <button class="sort-btn" data-sort="level">공포 난이도순</button>
-        </div>
+    <section class="main-section">
+      <h2 class="urban-title">괴담 모음</h2>
+      <div class="urban-sort">
+        <button class="sort-btn active" data-sort="latest">최신순</button>
+        <button class="sort-btn" data-sort="popular">인기순</button>
+        <button class="sort-btn" data-sort="level">공포 난이도순</button>
       </div>
-      <div class="urban-list" id="urbanList">
-        <!-- JS로 목록/상세가 랜더링됩니다 -->
+      <div class="product-list" id="urbanList">
+        <!-- 괴담 카드/상세가 JS로 렌더링됩니다 -->
       </div>
     </section>
   </main>

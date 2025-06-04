@@ -1,6 +1,3 @@
-// urban.js
-import { initUrbanFirebase } from './urban-firebase.js';
-
 // 더미 데이터(초기 목록용, 실제 좋아요/댓글은 firestore 연동)
 const urbanData = [
   {

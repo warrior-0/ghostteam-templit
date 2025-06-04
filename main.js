@@ -1,32 +1,5 @@
 // ✅ main.js: 드롭다운 메뉴 + 홈 슬라이더
 
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-const auth = getAuth();
-
-const loginLogoutBtn = document.getElementById("loginLogoutBtn");
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // 로그인 상태
-    loginLogoutBtn.textContent = "로그아웃";
-    loginLogoutBtn.onclick = async () => {
-      await signOut(auth);
-      alert("로그아웃 되었습니다.");
-      location.reload(); // 로그아웃 후 새로고침
-    };
-  } else {
-    // 비로그인 상태
-    loginLogoutBtn.textContent = "로그인";
-    loginLogoutBtn.onclick = () => {
-      // 현재 페이지 주소 저장 후 로그인 페이지로 이동
-      const returnUrl = encodeURIComponent(window.location.href);
-      window.location.href = `login.html?return=${returnUrl}`;
-    };
-  }
-});
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
   function setupDropdownMenus() {
     ['urbanMenu', 'communityMenu', 'aboutMenu'].forEach(menuId => {

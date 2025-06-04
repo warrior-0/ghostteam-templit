@@ -89,7 +89,18 @@
     alert("회원가입 오류: " + error.message);
   }
 }
+const logoutBtn = document.getElementById("logoutBtn");
 
+// 로그인 상태 확인
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // 로그인 상태일 때 로그아웃 버튼 표시
+    logoutBtn.style.display = "block";
+  } else {
+    // 로그아웃 상태일 때 버튼 숨김
+    logoutBtn.style.display = "none";
+  }
+});
 
     // 로그인
     async function signIn() {
@@ -403,6 +414,7 @@ let selectedRating = 0;
             <input type="text" id="nickname" placeholder="닉네임" />
             <button id="signUpBtn">회원가입</button>
             <button id="signInBtn">로그인</button>
+            <button id="logoutBtn" style="display: none;">로그아웃</button>
           </section>
       </div>
     </div>

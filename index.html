@@ -88,7 +88,10 @@
     alert("회원가입 오류: " + error.message);
   }
 }
-//로그인 상태일때만 로그아웃 버튼 표시
+    
+const logoutBtn = document.getElementById("logoutBtn");
+
+// 로그인 상태 확인
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // 로그인 상태일 때 로그아웃 버튼 표시
@@ -411,7 +414,7 @@ let selectedRating = 0;
             <input type="text" id="nickname" placeholder="닉네임" />
             <button id="signUpBtn">회원가입</button>
             <button id="signInBtn">로그인</button>
-            <button id="signOutBtn" >로그아웃</button>
+            <button id="signOutBtn" style="display: none">로그아웃</button>
           </section>
 
       </div>

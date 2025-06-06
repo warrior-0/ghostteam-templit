@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    
     window.addEventListener('popstate', () => {
       const newPage = new URLSearchParams(window.location.search).get('page') || 'intro';
       const newData = contentMap[newPage] || contentMap.intro;

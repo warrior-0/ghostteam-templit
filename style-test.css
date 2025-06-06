@@ -1,0 +1,700 @@
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', Arial, sans-serif;
+  background: #111;
+  color: #fafafa;
+}
+header {
+  background: #111;
+  border-bottom: 1px solid #222;
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.3rem 2rem;
+  display: flex;
+  align-items: center;
+}
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #e01c1c;
+  text-decoration: none;
+  border: none;
+  margin-left: 1rem;
+  transition: color 0.2s;
+}
+.logo:visited, .logo:active, .logo:hover {
+  text-decoration: none;
+  color: #e01c1c;
+  border: none;
+}
+
+.bgm-header-control {
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+
+.bgm-header-control #bgmToggleBtn {
+  background: #222;
+  color: #fafafa;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bgm-header-control #bgmToggleBtn:hover {
+  background: #e01c1c;
+  color: #fff;
+}
+
+nav {
+  margin-left: 2.5rem;
+}
+.gnb {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  font-size: 1.1rem;
+  position: relative;
+}
+.gnb li {
+  position: relative;
+}
+.gnb a {
+  text-decoration: none;
+  color: #fafafa;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.gnb a:visited, .gnb a:link, .gnb a:active {
+  color: #fafafa;
+  text-decoration: none;
+}
+.gnb a:hover {
+  color: #e01c1c;
+  text-decoration: none;
+}
+.gnb .dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.gnb .dropdown-arrow {
+  margin-left: 5px;
+  font-size: 0.85em;
+  transition: transform 0.18s;
+  display: inline-block;
+}
+.gnb .dropdown.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+.gnb .submenu {
+  display: none;
+  position: absolute;
+  top: 2.5rem;
+  left: 0;
+  min-width: 170px;
+  background: #222;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  z-index: 100;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  animation: fadeIn 0.2s;
+}
+.gnb li.show-submenu > .submenu {
+  display: flex;
+}
+.submenu a {
+  color: #fafafa;
+  padding: 0.7rem 1.4rem;
+  text-decoration: none;
+  font-size: 1rem;
+  white-space: nowrap;
+  transition: background 0.18s, color 0.18s;
+}
+.submenu a:hover {
+  background: #e01c1c;
+  color: #fff;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* ------ urban(괴담 페이지) ------ */
+.urban-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.urban-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fafafa;
+  letter-spacing: 1px;
+}
+.urban-sort {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2.2rem;
+}
+.urban-sort button {
+  background: #222;
+  color: #fafafa;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.18s, color 0.18s;
+}
+.urban-sort button.active, .urban-sort button:hover {
+  background: #e01c1c;
+  color: #fff;
+}
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.2rem 2.2rem;
+  flex: 1;
+  justify-content: flex-start;
+}
+.product-card.urban-item {
+  background: #181818;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  padding: 0.8rem 0.8rem 1.1rem 0.8rem;
+  width: 210px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.2s;
+  margin: 0;
+}
+.product-card.urban-item img {
+  width: 100%;
+  height: 115px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+.urban-item-title {
+  font-size: 1.02rem;
+  color: #e01c1c;
+  font-weight: 600;
+}
+.urban-item-meta {
+  font-size: 0.93rem;
+  color: #bbb;
+  margin-bottom: 0.3rem;
+  display: flex;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+}
+.level-stars {
+  color: #e01c1c;
+  font-size: 1.05em;
+  letter-spacing: 2px;
+  font-family: 'monospace', Arial, sans-serif;
+}
+.urban-detail {
+  cursor: default !important;
+}
+
+/* ------ 홈 인기 괴담 슬라이더 ------ */
+.product-slider-wrapper {
+  width: 650px;
+  overflow: hidden;
+  position: relative;
+  margin: 0 0.5rem;
+}
+.product-slider {
+  display: flex;
+  gap: 2rem;
+  transition: transform 0.4s cubic-bezier(.4,1.3,.45,.93);
+}
+.product-slider .product-card {
+  flex: 0 0 240px;
+  width: 240px;
+  min-width: 240px;
+  max-width: 240px;
+  background: #181818;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  padding: 1rem 1rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.product-slider .product-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.product-slider .product-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 마우스오버 시 */
+.product-slider .product-card:hover {
+  transform: translateY(-8px); /* 살짝 위로 뜨는 효과 */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4); /* 진한 그림자 */
+  z-index: 5;
+}
+
+/* ------ community(커뮤니티) ------ */
+.community-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.community-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fafafa;
+  letter-spacing: 1px;
+}
+.community-sort {
+  display: flex;
+  gap: 1rem;
+}
+.community-sort button {
+  background: #222;
+  color: #fafafa;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.18s, color 0.18s;
+}
+.community-sort button.active, .community-sort button:hover {
+  background: #e01c1c;
+  color: #fff;
+}
+.community-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.7rem;
+}
+.community-item {
+  background: #181818;
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.community-item-title {
+  font-size: 1.2rem;
+  color: #e01c1c;
+  font-weight: 600;
+}
+.community-item-meta {
+  font-size: 0.95rem;
+  color: #bbb;
+  margin-bottom: 0.3rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.community-item-body {
+  color: #fafafa;
+}
+.community-detail {
+  cursor: default !important;
+}
+
+/* ------ 홈(main-section, slider 등) ------ */
+.main-section {
+  max-width: 1200px;
+  margin: 2.5rem auto 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 왼쪽 정렬 */
+}
+
+.slider-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fafafa;
+  margin-bottom: 1.2rem;
+}
+
+/* 슬라이더 영역 */
+.slider-area {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.product-slider-wrapper {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.product-slider {
+  display: flex;
+  gap: 2rem;
+  transition: transform 0.4s cubic-bezier(.4,1.3,.45,.93);
+}
+
+.product-slider .product-card {
+  flex: 0 0 280px;
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+  background: #181818;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  padding: 1.2rem 1.2rem 1.8rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.product-slider .product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.product-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #fafafa;
+}
+
+.rating {
+  color: #ffb400;
+  font-size: 1.15rem;
+  font-family: monospace;
+  margin-bottom: 0.2rem;
+}
+
+.product-price {
+  color: #e01c1c;
+  font-size: 1.1rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.slider-arrow {
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #aaa;
+}
+
+.slider-arrow:hover {
+  background: #e01c1c;
+  color: #fff;
+}
+
+/* ------ 공통 푸터 ------ */
+footer {
+  margin-top: 4rem;
+  padding: 2rem 0 1rem 0;
+  background: #181818;
+  color: #888;
+  text-align: center;
+  font-size: 1rem;
+  border-top: 1px solid #222;
+}
+
+/* ------ 반응형 ------ */
+@media (max-width: 1100px) {
+  .product-list {
+    justify-content: center;
+    gap: 2rem 2rem;
+  }
+  .product-card.urban-item {
+    width: 32vw;
+    min-width: 155px;
+    max-width: 230px;
+  }
+  .product-card:not(.urban-item) {
+    width: 45vw;
+    min-width: 220px;
+    max-width: 340px;
+  }
+  .product-slider-wrapper {
+    width: 90vw;
+    min-width: 0;
+    max-width: 100vw;
+  }
+  .product-slider .product-card {
+    width: 40vw;
+    min-width: 160px;
+    max-width: 260px;
+  }
+}
+@media (max-width: 900px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  nav {
+    margin-left: 0.5rem;
+    margin-top: 1rem;
+  }
+}
+@media (max-width:700px) {
+  .urban-header, .community-header { flex-direction: column; gap: 1.2rem; align-items: flex-start;}
+  .urban-list, .community-list { gap: 1rem;}
+  .urban-item, .community-item { padding: 1rem;}
+  .product-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .product-card.urban-item {
+    width: 92vw;
+    max-width: 340px;
+    min-width: 130px;
+  }
+  .product-card:not(.urban-item) {
+    width: 95vw;
+    max-width: 370px;
+    min-width: 170px;
+  }
+  .product-slider-wrapper {
+    width: 98vw;
+  }
+  .product-slider .product-card {
+    width: 80vw;
+    min-width: 120px;
+    max-width: 350px;
+  }
+}
+
+.hero-section {
+  background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+  color: #fff;
+  padding: 7rem 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.hero-content {
+  background-color: rgba(0, 0, 0, 0.65);
+  display: inline-block;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-content h1 {
+  font-size: 2.2rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.hero-btn {
+  background: #e01c1c;
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hero-btn:hover {
+  background: #b21818;
+}
+
+/* ───────────────────────────────────────────────────────── */
+/* 기존에 있던 BGM 버튼 스타일 */
+.bgm-header-control {
+  /* 오른쪽 간격만 주고, 기본적으로 margin-left는 제거 */
+  margin-right: 0.5rem;
+}
+
+/* BGM 토글 컨테이너만 오른쪽 끝으로 밀기 */
+#bgmToggleContainer.bgm-header-control {
+  margin-left: auto;
+}
+
+/* 로그인 버튼 컨테이너는 왼쪽 여백만 두고, 따로 margin-left 없음 */
+#authBtnContainer.bgm-header-control {
+  margin-left: 0;
+}
+
+#bgmToggleBtn,
+#authBtn {
+  background: #e01c1c;          /* 붉은색 배경 */
+  color: #fff;                  /* 흰색 텍스트 */
+  border: none;                 /* 테두리 제거 */
+  padding: 0.4rem 1rem;         /* 상하 0.4rem, 좌우 1rem */
+  border-radius: 20px;          /* 둥근 모서리 */
+  font-size: 0.95rem;           /* 글씨 크기 */
+  cursor: pointer;              /* 마우스 포인터 변경 */
+  display: flex;                
+  align-items: center;
+  gap: 0.5rem;                  /* 아이콘과 텍스트 사이 간격 */
+  transition: background 0.2s;  /* 호버 시 부드러운 배경 전환 */
+}
+
+#bgmToggleBtn:hover,
+#authBtn:hover {
+  background: #b21818;  /* 마우스 올리면 진한 붉은색으로 변경 */
+}
+
+/* ============================================================================
+   괴담 상세 페이지 “꽉 찬 카드 박스” 스타일
+   위치: style.css 맨 아래에 붙여넣어 주세요.
+   ============================================================================ */
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 1) detail-card: 가로를 거의 꽉 채우되, 최대 너비를 지정            */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card {
+  /* 화면 가로 100%에서 좌우 패딩을 주어 텍스트가 너무 붙어 보이지 않게 함 */
+  width: 100%;
+  max-width: 1200px;    /* 최대 너비를 1200px로 제한 */
+  margin: 2rem auto;    /* 상하 2rem 여백, 좌우 자동 중앙 정렬 */
+  background: #1a1a1a;  /* 카드 배경을 기존보다 조금 더 진하게 */
+  border-radius: 12px;  /* 둥근 모서리 */
+  padding: 2.5rem 2rem; /* 내부 여백을 좀 더 넉넉히 */
+  box-shadow: 0 0 10px rgba(0,0,0,0.5); /* 은은한 그림자 */
+  color: #eee;          /* 카드 내부 기본 텍스트 색상 */
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 2) 상세 제목 (detail-title)                                        */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-title {
+  font-size: 2.2rem;
+  color: #e01c1c;        /* 붉은색 강조 */
+  margin-bottom: 0.8rem; /* 제목 아래 간격을 더 넉넉하게 */
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 3) 메타정보 첫 번째 줄 (좋아요 · 날짜)                                  */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-meta-line1 {
+  color: #bbb;
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 4) 메타정보 두 번째 줄 (공포 난이도)                                      */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-meta-line2 {
+  color: #bbb;
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem; /* 위아래 여백을 좀 더 */
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 5) “공포 난이도” 별(★) 색상                                             */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-level-stars {
+  color: #e01c1c; /* ★★★를 붉은색으로 강조 */
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 6) 음성 모드 컨테이너 (detail-voice-container)                            */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-voice-container {
+  text-align: right;      /* 오른쪽 정렬 */
+  margin-bottom: 1.5rem;  /* 아래쪽 간격 */
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 7) “🎧 음성 모드” 버튼 (detail-voice-btn)                               */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-voice-btn {
+  background: #444;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.detail-card .detail-voice-btn:hover {
+  background: #333;
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 8) 오디오 컨트롤 (detail-audio)                                        */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-audio {
+  display: none;        /* 기본 숨김 */
+  margin-top: 0.6rem;   /* 버튼 아래 여백 */
+  width: 100%;          /* 전체 폭 사용 */
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 9) 본문 영역 (detail-body)                                           */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-body {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #eee;
+  margin-bottom: 2rem;
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 10) “목록으로” 버튼 (detail-back-btn)                                  */
+/* ────────────────────────────────────────────────────────────────────────── */
+.detail-card .detail-back-btn {
+  background: #444;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.detail-card .detail-back-btn:hover {
+  background: #333;
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 11) 상단 흰색 제목(.urban-title) 처리 (선택 사항)                         */
+/* ────────────────────────────────────────────────────────────────────────── */
+/* 만약 상세 화면 진입 시 “흰색 제목(.urban-title)”을 보이지 않게 하고 싶다면 아래 주석을 해제하세요. */
+/* .urban-title { display: none; } */
+
+
